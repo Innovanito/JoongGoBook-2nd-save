@@ -5,17 +5,20 @@ import { useNavigate} from 'react-router-dom'
 
 import {client} from '../client'
 import Spinner from './Spinner'
-import {categoreis} from '../utils/data'
+
+// 무조건 추가해야할 기능들
+//1. 제품의 상품명이 Pin.jsx에 넣어줄 수 있어야 함
+//2. 제품의 설명란에 Enter키를 넣을 수 있도록 만들기
 
 
+//추가하면 더 좋을 기능들
+//1. 양식의 항목들을 다 작성하지 않을 때 나태내주는 글을 그냥 보여주지 말고 페이지에 맨 상단으로 끌어 올린 후에 메시지를 보여주는  기능(이 프로젝트에서 다룬적이 있음)
 
 const CreatePin = ({user}) => {
   const [title, setTitle] = useState('')
   const [about, setAbout] = useState('')
-  const [destination, setDestination] = useState('')
   const [loading, setLoading] = useState(false)
   const [fields, setFields] = useState(null)
-  const [category, setCategory] = useState(null)
   const [imageAsset, setImageAsset] = useState(null)
   const [wrongImageType, setWrongImageType] = useState(false)
 
@@ -43,11 +46,42 @@ const CreatePin = ({user}) => {
     }
   }
 
+  const savePin = () => {
+    if (title && about && imageAsset?._id) {
+      const doc = {
+        _type: 'pin',
+        title,
+        about,
+        image: {
+          _type: 'image',
+          asset: {
+            _type: 'reference',
+            _ref: imageAsset?._id
+          }
+        },
+        userId: user._id,
+        postedBy: {
+          _type: 'postedBy',
+          _ref: user._id,
+        }
+      }
+      client.create(doc)
+        .then(() => {
+          navigate('/')
+        })
+    } else {
+      setFields(true)
+      setTimeout(() => {
+        setFields(false)
+      },2000)
+    }
+  }
+
 
   return (
     <div className="flex flex-col justify-center items-center mt-5 lg:h-4/5">
       {fields && (
-        <p className='text-red-500 mb-5 text-xl transition-all duration-150 ease-in'>양식의 항목을 다 작성해주세요 ^.^</p>
+        <p className='text-red-500 mb-5 text-xl transition-all duration-150 ease-in'>양식의 항목을 다 작성해주세요!</p>
       )}
       <div className="flex lg:flex-row flex-col justify-center items-center bg-white lg:p-5 p-3 lg:w-4/5 w-full">
         <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
@@ -88,8 +122,38 @@ const CreatePin = ({user}) => {
             )}
           </div>
         </div>
-        <div className="flex">
-
+        <div className="flex flex-1 flex-col gap-6 lg:pl-5 mt-5 w-full">
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder='제목을 입력하세요'
+            className='outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2'
+          />
+          {user && (
+            <div className="flex gap-2 items-center my-2 bg-white rounded-lg">
+              <img src={user.image} alt="user-image" className='w-10 h-10 rounded-full' />
+              <p className='font-bold'>{user.userName}</p>
+            </div>
+          )}
+          <input
+            type="text"
+            value={about}
+            onChange={(e) => setAbout(e.target.value)}
+            placeholder='제품의 설명을 넣어주세요'
+            className='sm:text-lg border-b-2 border-gray-200 p-2 h-40'
+          />
+          <div className="felx flex-col">
+            <div className="flex justify-end items-end mt-5">
+              <button
+                type="button"
+                onClick={savePin}
+                className='bg-red-500 text-white font-bold p-2 rounded-full w-28 outline-none'
+              >
+                게시물 올리기
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
