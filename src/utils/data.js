@@ -1,5 +1,3 @@
-
-
 export const userQuery = (userId) => {
   const query =`*[_type == "user" && _id == '${userId}']`
 
@@ -31,6 +29,7 @@ export const searchQuery = (searchTerm) => {
   }`
   return query
 }
+
 export const feedQuery = `*[_type == 'pin'] | order(_createAt desc) {
   image {
       asset -> {
@@ -38,7 +37,6 @@ export const feedQuery = `*[_type == 'pin'] | order(_createAt desc) {
       }
     },
     _id,
-    destination,
     postedBy -> {
       _id,
       userName,
@@ -55,9 +53,9 @@ export const feedQuery = `*[_type == 'pin'] | order(_createAt desc) {
 }`
 
 export const pinDetailQuery = (pinId) => {
-  const query = `*[_type == "pin" && _id == '${pinId}]{
+  const query = `*[_type == "pin" && _id == '${pinId}']{
     image{
-      asset-> {
+      asset->{
         url
       }
     },
@@ -65,6 +63,40 @@ export const pinDetailQuery = (pinId) => {
     title,
     about,
     category,
+    postedBy->{
+      _id,
+      userName,
+      image
+    },
+    save[]{
+      postedBy->{
+        _id,
+        userName,
+        image
+      },
+    },
+    comments[]{
+      comment,
+      _key,
+      postedBy-> {
+        _id,
+        userName,
+        image
+      },
+    }
+  }`;
+  return query;
+};
+
+export const userCreatedPinsQuery = (userId) => {
+  const query = `*[_type == 'pin' && userId == '${userId}'] | order(_createdAt desc) {
+    image {
+      asset -> {
+        url
+      }
+    },
+    _id,
+    destination,
     postedBy -> {
       _id,
       userName,
@@ -75,39 +107,30 @@ export const pinDetailQuery = (pinId) => {
         _id,
         userName,
         image
-      }
+      },
     },
-    comments[] {
-      comment,
-      _key,
-      postedBy -> {
-        _id,
-        userName,
-        image
-      }
-    }
   }`
   return query
 }
 
-export const pinDetailMoreQuery = (pin) => {
-  const query = `*[_type == "pin" && category == '${pin.category} && _id != '${pin._id}'] {
+export const userSavedPinsQuery = (userId) => {
+  const query = `*[_type == 'pin' && '${userId}' in save[].userId] | order(createdAt desc) {
     image {
       asset -> {
         url
       }
     },
     _id,
-    postedBy-> {
+    destination,
+    postedBy ->{
       _id,
       userName,
       image
     },
     save[] {
-      _key,
       postedBy -> {
         _id,
-        uesrName,
+        userName,
         image
       }
     }

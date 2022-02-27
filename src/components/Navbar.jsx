@@ -15,7 +15,7 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
         <input
           type="text"
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="검색하기"
+          placeholder="중고상품 검색하기"
           value={searchTerm}
           onFocus={() => navigate('/search')}
           className='p-2 w-full bg-white outline-none'

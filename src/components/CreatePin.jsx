@@ -6,7 +6,7 @@ import { useNavigate} from 'react-router-dom'
 import {client} from '../client'
 import Spinner from './Spinner'
 
-// 무조건 추가해야할 기능들
+// 무조건 추가해야할 기능들b
 //1. 제품의 상품명이 Pin.jsx에 넣어줄 수 있어야 함
 //2. 제품의 설명란에 Enter키를 넣을 수 있도록 만들기
 
