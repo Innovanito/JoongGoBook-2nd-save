@@ -53,7 +53,7 @@ const PinDetail = ({user}) => {
   if(!pinDetail) return <Spinner message='상품을 불러오고있습니다' />
   
   return (
-    <div className='flex flex-col m-auto bg-white' style={{ maxWidth: '1500px', borderRadius: '32px'}}>
+    <div className='flex flex-col m-auto pl-8 mt-3 bg-white' style={{ maxWidth: '1500px', borderRadius: '32px'}}>
       <div className="flex justify-center items-center flex-initial w-350">
         <img
           src={pinDetail?.image && urlFor(pinDetail?.image).url()}

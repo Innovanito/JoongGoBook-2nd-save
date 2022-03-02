@@ -16,11 +16,13 @@ import { useNavigate } from 'react-router-dom'
 
 import GoogleLogin from 'react-google-login'
 
-
 import { client } from '../client'
 
-
 import logo from '../assets/logo.png'
+
+// 만들어야할 기능들
+// 1. 비밀번호 찾기 기능 만들기
+// 2. 계정 기억하기 기능 만들기
 
 const Signin = () => {
   const navigate = useNavigate()
@@ -52,13 +54,11 @@ const Signin = () => {
             alignItems: 'center',
           }}
       >
-        <Avatar sx={{bgcolor: 'white'}}>
-          <div className="flex justify-center items-center m-2">
-            <img src={logo} alt="web-logo" />
-          </div>
-        </Avatar>
+        <div className="flex justify-center items-center m-2 w-40">
+          <img src={logo} alt="web-logo" />
+        </div>
         <Typography component="h1" variant="h5">
-          회원가입하기
+          회원가입
         </Typography>
         <TextField
           margin="normal"
@@ -90,7 +90,7 @@ const Signin = () => {
             </Link>
           </Grid>
           <Grid item>
-            <Link>
+            <Link href="/signup">
               회원가입하기
             </Link> 
           </Grid>
