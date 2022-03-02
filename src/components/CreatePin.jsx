@@ -6,13 +6,14 @@ import { useNavigate} from 'react-router-dom'
 import {client} from '../client'
 import Spinner from './Spinner'
 
-// 무조건 추가해야할 기능들b
+// 무조건 추가해야할 기능들
 //1. 제품의 상품명이 Pin.jsx에 넣어줄 수 있어야 함
 //2. 제품의 설명란에 Enter키를 넣을 수 있도록 만들기
 
 
 //추가하면 더 좋을 기능들
 //1. 양식의 항목들을 다 작성하지 않을 때 나태내주는 글을 그냥 보여주지 말고 페이지에 맨 상단으로 끌어 올린 후에 메시지를 보여주는  기능(이 프로젝트에서 다룬적이 있음)
+//2. 이미지 업로드를 2장 이상 할 수 있게금 구현하기
 
 const CreatePin = ({user}) => {
   const [title, setTitle] = useState('')
@@ -86,7 +87,7 @@ const CreatePin = ({user}) => {
       <div className="flex lg:flex-row flex-col justify-center items-center bg-white lg:p-5 p-3 lg:w-4/5 w-full">
         <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
           <div className="flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
-            {loading && <Spinner/>}
+            {loading && <Spinner message='이미지를 업로드 하는 중입니다...' />}
             {wrongImageType && <p>잘못된 이미지 타입입니다</p> }
             {!imageAsset ? (
               <label>
@@ -136,7 +137,7 @@ const CreatePin = ({user}) => {
               <p className='font-bold'>{user.userName}</p>
             </div>
           )}
-          <input
+          <textarea
             type="text"
             value={about}
             onChange={(e) => setAbout(e.target.value)}

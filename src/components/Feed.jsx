@@ -32,11 +32,17 @@ const Feed = () => {
   }, [categoryId])
   
 
-  if(loading) return <Spinner message='로딩중입니다' />
+  if (loading) return <Spinner message='로딩중입니다' />
 
   return (
     <div>
-      { pins && <MasonryLayout pins={pins}/>}
+      {
+        (pins?.length === 0) ? 
+          <div className="flex justify-center items-center text-xl font-bold">
+            찾으시는 게시물이 존재하지 않습니다
+          </div> :
+          pins && <MasonryLayout pins={pins}/>
+      }
     </div>
   )
 }

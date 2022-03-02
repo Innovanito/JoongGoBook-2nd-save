@@ -7,7 +7,8 @@ import { AiTwotoneDelete } from 'react-icons/ai';
 import {client, urlFor } from '../client'
 import { fetchUser } from '../utils/fetchUser'
 
-const Pin = ({ pin: {postedBy, image, _id, save, title}}) => {
+const Pin = ({ pin}) => {
+  const {postedBy, image, _id, save, title} = pin
   const [postHovered, setPostHovered] = useState(false)
   const [savingPost, setSavingPost] = useState(false)
 
@@ -105,11 +106,6 @@ const Pin = ({ pin: {postedBy, image, _id, save, title}}) => {
       <div className="flex flex-col p-1">
         <Link to='/pin-detail/:pinId' className='flex gap2 mt-2 items-center' >
           <p className='p-2'>{title}</p>
-          <p className='p-2'>여기에 제목이 옵니다</p>
-        </Link>
-        <Link to={`user-profile/${postedBy?._id}`} className='flex gap-2 mt-2 items-center' >
-          <img className='w-8 h-8 rounded-full object-cover' src={postedBy?.image} alt="user-profile" />
-          <p className='font-semibold p-2'>{postedBy?.userName}</p>
         </Link>
       </div>
     </div>

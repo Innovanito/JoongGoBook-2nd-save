@@ -59,7 +59,6 @@ const UserProfile = () => {
   if (!user) {
     return <Spinner message='페이지 로딩중...' />
   }
-  console.log('randomImage' ,randomImage);
 
   return (
     <div className='relative pb-2 h-full justify-center items-center'>
@@ -100,7 +99,7 @@ const UserProfile = () => {
             </div>
           </div>
           <div className="text-center mb-7">
-            <button
+            < button
               type='button'
               onClick={(e) => {
                 setText('Created')
