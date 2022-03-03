@@ -117,7 +117,7 @@ const UserProfile = () => {
               }}
               className={`${activeBtn === 'saved' ? activeBtnStyles : notActiveBtnStyles}`}
             >
-              저장된 게시물
+              찜한 게시물
             </button>
           </div>
           <div className="px-2">

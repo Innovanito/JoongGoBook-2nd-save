@@ -63,20 +63,11 @@ const Sidebar = ({ user, closeToggle }) => {
           </div>
           <div>
             <NavLink
-              to={'/'}
+              to={`/user-profile/${user?._id}`}
               className={isActiveStyle}
               onClick={handleCloseSidebar}
             >
               {categories[2].name}
-              </NavLink>
-          </div>
-          <div>
-            <NavLink
-              to={'/'}
-              className={isActiveStyle}
-              onClick={handleCloseSidebar}
-            >
-              {categories[3].name}
               </NavLink>
           </div>
         </div>
