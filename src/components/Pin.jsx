@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import { Link, Navigate, useNavigate} from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
-import { AiTwotoneDelete } from 'react-icons/ai';
 
 
 import {client, urlFor } from '../client'
@@ -41,13 +40,6 @@ const Pin = ({ pin}) => {
     }
   }
 
-  const deletePin = (id) => {
-    client
-      .delete(id)
-      .then(() => {
-        window.location.reload();
-      });
-  };
 
 
   return (
@@ -90,16 +82,6 @@ const Pin = ({ pin}) => {
                 </button>
               )}
             </div>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                deletePin(_id);
-              }}
-              className="bg-white p-2 rounded-full w-8 h-8 flex items-center justify-center text-dark opacity-75 hover:opacity-100 outline-none"
-            >
-              <AiTwotoneDelete />
-            </button>
           </div>
         )}
       </div>

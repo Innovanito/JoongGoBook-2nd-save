@@ -3,18 +3,20 @@ import {HiMenu} from 'react-icons/hi'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import {Link, Route, Routes} from 'react-router-dom'
 
-import {Sidebar, UserProfile, Footer} from '../components'
+import {Sidebar, UserProfile, Footer, Navbar, Signin} from '../components'
 import Pins from './Pins'
 import { userQuery } from '../utils/data'
 import {client} from '../client'
 import logo from '../assets/logo.png'
 import { fetchUser } from '../utils/fetchUser'
 
+
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false)
   const [user, setUser] = useState(null)
   const scrollRef = useRef(null)
   const userInfo = fetchUser()
+  const [isUserExist, setIsUserExist] = useState(false)
 
   useEffect(() => {
     const query = userQuery(userInfo?.googleId)
@@ -23,6 +25,7 @@ const Home = () => {
       .then((data) => {
         setUser(data[0])
       })
+    if(user) setIsUserExist(true)
   }, [])
 
   useEffect(() => {
@@ -43,9 +46,13 @@ const Home = () => {
             <Link to='/' >
               <img src={logo} alt="logo" className='w-28' />
             </Link>
-            <Link to={`user-profile/${user?._id}`} >
-              <img src={user?.image} alt="user-image" className='w-9 h-9 rounded-full' />
-            </Link>
+            {isUserExist ?
+              <Link to={`user-profile/${user?._id}`} >
+                <img src={user?.image} alt="user-image" className='w-9 h-9 rounded-full' />
+              </Link> :
+              <Link to={'/signin'}>
+                <button className=' flex items-center w-15 text-gray-500'>로그인</button>
+              </Link>}
           </div>
           {toggleSidebar && (
           <div className="fixed w-1/2 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in">

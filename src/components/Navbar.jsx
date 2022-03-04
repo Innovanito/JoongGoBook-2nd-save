@@ -6,8 +6,6 @@ import {IoMdAdd, IoMdSearch} from 'react-icons/io'
 const Navbar = ({searchTerm, setSearchTerm, user}) => {
   const navigate = useNavigate()
 
-  if(!user) return null
-
   return (
     <div className='flex flex-col bg-white'>
       <div className='flex flex-col h-80 items-end justify-end pr-5 text-gray-400'>
@@ -18,7 +16,7 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
           판매 및 구매 시 직거래를 권장합니다
         </h2>
       </div>
-      <div className="flex w-full mt-5 pb-7">
+      <div className="flex items-center w-full mt-5 pb-7">
         <div className="flex justify-start items-center w-full rounded-lg bg-gray-100 border-none outline-none focus-within:shadow-sm mr-10">
           <IoMdSearch fontSize={21} className='ml-1' />
           <input
@@ -30,6 +28,7 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
             className='p-2 w-full bg-gray-100 outline-none'
           />
         </div>
+        {user ?
         <div className="flex gap-3">
           <Link to={`user-profile/${user?._id}`} className='hidden md:block' >
             <img src={user?.image} alt="user-image" className='w-14 h-12 rounded-lg' />
@@ -37,7 +36,12 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
           <Link to='create-pin' className='bg-gray-200 text-black rounded-lg w-12 h-12 md:w-14 md:h-12 flex justify-center items-center' >
             <IoMdAdd />
           </Link>
-        </div>
+          </div> :
+        <div className="flex items-center">
+          <Link to={'/signin'}>
+            <button className='w-20 text-gray-500'>로그인</button>
+          </Link>
+        </div> }
       </div>
     </div>
   )

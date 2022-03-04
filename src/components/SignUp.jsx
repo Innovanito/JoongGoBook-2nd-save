@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -6,30 +6,56 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+// import { v4 as uuidv4 } from 'uuid'
 
 import { client } from '../client'
+import { useNavigate} from 'react-router-dom'
 
 import logo from '../assets/logo.png'
-
-//만들어야 할 함수들
-// 1. 비밀번호와 재비밀번호 입력이 같을 때 pass(변수 만들어서 Boolean의 값으로 통과시켜 회원가입하기 버튼 누를 수 있게), 다를 때에는 회원가입 h1 밑에 빨간색으로 경고 알려주기 
-// 2. 필수로 입력해야
-// 3. MUI보면서 전반적으로 함수와 구성을 어떻게 했는지 보기
+import Spinner from './Spinner';
 
 
 const Signup = () => {
+  // 계정 생성하는 동안 Spinner를 보여주냐 아니면 보여주지 말냐 결정하는 Boolean 변수
+  const [addingAccountInfo, setAddingAccountInfo] = useState(false)
+  //계정의 항목을 다 작성했는지 안 했는지 알려주는 Boolean 변수
+  const [fields, setFields] = useState(false)
+
+  const navigate = useNavigate()
+
+
   const handleSubmit = (event) => {
+    setAddingAccountInfo(true)
+
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
 
-    // e-mail과 비밀번호의 데이터를 이런 형식으로 보내준다
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
+    const doc = {
+      _type: 'accountInfo',
+      userId : data.get('userId'),
+      password : data.get('password'),
+      userNickname  : data.get('userNickname'),
+      userEmail : data.get('userEmail')
+    }
+
+    if (doc.userId && doc.password && doc.userNickname && doc.userEmail) {
+      client.create(doc)
+        .then(() => {
+          setAddingAccountInfo(false)
+          navigate('/')
+        })
+    } else {
+      setFields(true)
+      setTimeout(() => {
+        setFields(false)
+      },2000)
+    }
   };
   return (
-    <Container component="main" maxWidth="xs">
+    (addingAccountInfo ?
+      (<Spinner message='계정 정보를 등록중입니다...' /> ): 
+      (<Container component="main" maxWidth="xs">
         <Box
           sx={{
             marginTop: 8,
@@ -44,6 +70,9 @@ const Signup = () => {
           <Typography component="h1" variant="h5">
             회원가입
           </Typography>
+          {fields && (
+            <p className='text-red-500 mb-5 text-xl text-center transition-all duration-150 ease-in'>양식의 항목을 다 작성해주세요!</p>
+          )}
           <Box component="form" noValidate sx={{ mt: 3 }}
             onSubmit={handleSubmit}
           >
@@ -51,16 +80,18 @@ const Signup = () => {
               <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="이름"
+                  name="userId"
                   required
                   fullWidth
-                  id="Name"
-                  label="이름을 입력해주세요"
+                  id="userId"
+                  type='userId'
+                  label="아이디"
                   autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+              <TextField
+                  margin="normal"
                   required
                   fullWidth
                   name="password"
@@ -72,13 +103,25 @@ const Signup = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  margin="normal"
                   required
                   fullWidth
-                  name="password2"
-                  label="비밀번호를 재입력해주세요"
-                  type="password"
-                  id="password2"
-                  autoComplete="new-password"
+                  id="userEmail"
+                  label="이메일 주소(분실 때 사용)"
+                  name="userEmail"
+                  autoComplete="userEmail"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="userNickname"
+                  label="이 사이트 별명"
+                  name="userNickname"
+                  autoFocus
                 />
               </Grid>
             </Grid>
@@ -99,7 +142,8 @@ const Signup = () => {
             </Grid>
           </Box>
         </Box>
-      </Container>
+      </Container>)
+    )
   )
 }
 

@@ -7,7 +7,6 @@ import { FormControlLabel } from '@mui/material'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 
@@ -64,16 +63,16 @@ const Signin = () => {
           margin="normal"
           required
           fullWidth
-          label="Email Address"
-          name="email"
-          autoComplete="email"
+          label="아이디"
+          name="userId"
+          autoComplete="userId"
           autoFocus
         /> 
         <TextField
           margin="normal"
           required
           fullWidth
-          label="Password"
+          label="비밀번호"
           name="password"
           autoComplete="current-passsword"
           autoFocus

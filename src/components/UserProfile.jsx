@@ -52,7 +52,7 @@ const UserProfile = () => {
 
   const logout = () => {
     localStorage.clear()
-    navigate('/login')
+    navigate('/signin')
   }
   
 
