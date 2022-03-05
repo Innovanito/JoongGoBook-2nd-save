@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState , useEffect} from 'react'
 import '../index.css'
 import TextField from '@mui/material/TextField'
 import Checkbox from '@mui/material/Checkbox'
@@ -18,6 +18,8 @@ import GoogleLogin from 'react-google-login'
 import { client } from '../client'
 
 import logo from '../assets/logo.png'
+import userIcon from '../assets/user-icon.png'
+import { accountIdAndPw } from '../utils/data'
 
 // 만들어야할 기능들
 // 1. 비밀번호 찾기 기능 만들기
@@ -25,12 +27,16 @@ import logo from '../assets/logo.png'
 
 const Signin = () => {
   const navigate = useNavigate()
+  const [idNotExist, setIdNotExist] = useState(false) //아직 안씀
+  const [isLoading, setIsLoading] = useState(false)// 이 변수는 썼는데 아직 Spinner.jsx를 안 씀
+  const [isPwWrong, setIsPwWrong] = useState(false)//아직 안씀
+    //Google으로 로그인을 했는지 아니면 MyWeb으로 로그인을 했는지 - 값의 형태는 Boolean
+  const [isMyAccount, setIsMyAccount] = useState(null)
 
   const responseGoogle = (response) => {
     localStorage.setItem('user', JSON.stringify(response.profileObj))
 
     const {name, googleId, imageUrl} = response.profileObj
-
     const doc = {
       _id: googleId,
       _type: 'user',
@@ -43,6 +49,42 @@ const Signin = () => {
         navigate('/', { replace: true })
       })
   }
+
+  const handleSubmit = (event) => {
+    setIsLoading(true)
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+   
+    const userId = data.get('userId')
+    const password = data.get('password')
+
+    const query = accountIdAndPw(userId)
+    if (query) {
+      client.fetch(query)
+        .then((data) => {
+        
+          if (data[0]?.password) {
+            setIsMyAccount('MyWeb')
+            console.log('value of isMyAccount', isMyAccount);
+            const doc = {
+              _id: userId,
+              _type: 'user',
+              userName: data[0].userNickname,
+              image: userIcon,
+              isMyAccount
+            }
+            localStorage.setItem('user', JSON.stringify(doc))
+            setIsLoading(false)
+            navigate('/', { replace: true })
+          } else {
+            alert('일치하는 아이디나 비번이 없습니다')
+            setIsLoading(false)
+          }
+        })
+    } 
+  };
+  
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -59,29 +101,38 @@ const Signin = () => {
         <Typography component="h1" variant="h5">
           회원가입
         </Typography>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="아이디"
-          name="userId"
-          autoComplete="userId"
-          autoFocus
-        /> 
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          label="비밀번호"
-          name="password"
-          autoComplete="current-passsword"
-          autoFocus
-        /> 
-        <FormControlLabel control={
-          <Checkbox value="remember" color="primary" />
-        } label="계정기억하기" />
-        
-        <Button type="submit" fullWidth variant='contained' sx={{mt: 3, mb:2}}>로그인</Button>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="아이디"
+            name="userId"
+            autoComplete="userId"
+            autoFocus
+          /> 
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="비밀번호"
+            name="password"
+            autoComplete="current-passsword"
+            autoFocus
+          /> 
+        <FormControlLabel
+          control={
+            <Checkbox value="remember" color="primary" />
+          } label="계정기억하기" />
+          
+          <Button
+            type="submit"
+            fullWidth variant='contained'
+            sx={{ mt: 3, mb: 2 }}
+          >
+            로그인
+          </Button>
+        </Box>
         <Grid container>
           <Grid item xs>
             <Link>

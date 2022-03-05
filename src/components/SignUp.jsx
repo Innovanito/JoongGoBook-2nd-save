@@ -106,6 +106,18 @@ const Signup = () => {
                   margin="normal"
                   required
                   fullWidth
+                  id="userName"
+                  label="이름"
+                  name="userName"
+                  autoComplete="userName"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
                   id="userEmail"
                   label="이메일 주소(분실 때 사용)"
                   name="userEmail"

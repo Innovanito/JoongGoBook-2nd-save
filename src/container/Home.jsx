@@ -5,10 +5,13 @@ import {Link, Route, Routes} from 'react-router-dom'
 
 import {Sidebar, UserProfile, Footer, Navbar, Signin} from '../components'
 import Pins from './Pins'
+
 import { userQuery } from '../utils/data'
-import {client} from '../client'
-import logo from '../assets/logo.png'
 import { fetchUser } from '../utils/fetchUser'
+
+import {client} from '../client'
+
+import logo from '../assets/logo.png'
 
 
 const Home = () => {
@@ -18,14 +21,28 @@ const Home = () => {
   const userInfo = fetchUser()
   const [isUserExist, setIsUserExist] = useState(false)
 
-  useEffect(() => {
-    const query = userQuery(userInfo?.googleId)
 
-    client.fetch(query)
-      .then((data) => {
-        setUser(data[0])
-      })
-    if(user) setIsUserExist(true)
+  console.log('userInfo', userInfo);
+
+  useEffect(() => {
+    if (userInfo?.googleId) {
+      const query = userQuery(userInfo?.googleId) 
+  
+      client
+        .fetch(query)
+        .then((data) => {
+          setUser(data[0])
+        })
+    } else {
+      const query = userQuery(userInfo?._id) 
+      console.log('queryInfo', query);
+      client
+        .fetch(query)
+        .then((data) => {
+          setUser(data[0])
+        })
+    }
+    console.log('userInfo2', user );
   }, [])
 
   useEffect(() => {

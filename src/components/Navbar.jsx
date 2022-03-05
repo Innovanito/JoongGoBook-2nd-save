@@ -2,7 +2,7 @@ import React from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {IoMdAdd, IoMdSearch} from 'react-icons/io'
 
-
+//여기에 내 홈페이지 계정의 정보를 넣어주기
 const Navbar = ({searchTerm, setSearchTerm, user}) => {
   const navigate = useNavigate()
 

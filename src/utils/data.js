@@ -3,7 +3,6 @@ export const categories = [
   {name: '중고 교제 살펴보기'},
   { name: '중고 교제 올리기' },
   { name: '나의 활동기록 보기' },
-  
   // {name: '중고 교제 무료나눔'},
   // {name: '중고 장비'},
   // {name: '신고하기'},
@@ -149,6 +148,17 @@ export const userSavedPinsQuery = (userId) => {
   }`
   return query
 }
+
+
+export const accountIdAndPw = (userId) => {
+  const query = `*[_type == "accountInfo" && userId == '${userId}']{
+    password,
+    userNickname,
+    userEmail,
+    userName
+  }`;
+  return query;
+};
 
 //260개 정도 목록이 있음
 export const univList = [
