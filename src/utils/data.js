@@ -14,6 +14,24 @@ export const userQuery = (userId) => {
   return query
 }
 
+export const userQueryForMyAccount = (userId) => {
+  const query =`*[_type == "accountInfo" && userId == '${userId}']`
+
+  return query
+}
+
+export const bringDefaultImage = () => {
+  const query =`*[_type == "defaultImage" && title match 'userIcon'] {
+    image {
+      asset -> {
+        url
+      }
+    }
+  }`
+  return query
+}
+
+
 export const searchQuery = (searchTerm) => {
   const query = `*[_type == 'pin' && title match '${searchTerm}*' || category match '${searchTerm}*' || about match '${searchTerm}*']{
     image {

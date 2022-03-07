@@ -2,8 +2,9 @@ import React from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {IoMdAdd, IoMdSearch} from 'react-icons/io'
 
-//여기에 내 홈페이지 계정의 정보를 넣어주기
+//여기에 내 홈페이지 계정의 정보를 넣어주기dp
 const Navbar = ({searchTerm, setSearchTerm, user}) => {
+
   const navigate = useNavigate()
 
   return (
@@ -29,14 +30,14 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
           />
         </div>
         {user ?
-        <div className="flex gap-3">
-          <Link to={`user-profile/${user?._id}`} className='hidden md:block' >
+        <div className="flex gap-3"> 
+          {/* <Link to={`user-profile/${user?._id}`} className='hidden md:block' >
             <img src={user?.image} alt="user-image" className='w-14 h-12 rounded-lg' />
-          </Link>
+          </Link> */}
           <Link to='create-pin' className='bg-gray-200 text-black rounded-lg w-12 h-12 md:w-14 md:h-12 flex justify-center items-center' >
             <IoMdAdd />
           </Link>
-          </div> :
+        </div> :
         <div className="flex items-center">
           <Link to={'/signin'}>
             <button className='w-20 text-gray-500'>로그인</button>

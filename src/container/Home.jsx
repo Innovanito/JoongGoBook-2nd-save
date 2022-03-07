@@ -6,7 +6,7 @@ import {Link, Route, Routes} from 'react-router-dom'
 import {Sidebar, UserProfile, Footer, Navbar, Signin} from '../components'
 import Pins from './Pins'
 
-import { userQuery } from '../utils/data'
+import { userQuery, userQueryForMyAccount } from '../utils/data'
 import { fetchUser } from '../utils/fetchUser'
 
 import {client} from '../client'
@@ -20,36 +20,43 @@ const Home = () => {
   const scrollRef = useRef(null)
   const userInfo = fetchUser()
   const [isUserExist, setIsUserExist] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) //로딩중을 나타내는 Boolean 변수
+  const [userImageUrl, setUserImageUrl] = useState('')
 
-
-  console.log('userInfo', userInfo);
 
   useEffect(() => {
+    setIsLoading(true)
+
     if (userInfo?.googleId) {
+
       const query = userQuery(userInfo?.googleId) 
-  
       client
-        .fetch(query)
         .then((data) => {
           setUser(data[0])
+          setUserImageUrl(user?.image)
+          setIsUserExist(true)
+          setIsLoading(false)
         })
     } else {
-      const query = userQuery(userInfo?._id) 
-      console.log('queryInfo', query);
+      const query = userQueryForMyAccount(userInfo?._id) 
       client
         .fetch(query)
         .then((data) => {
           setUser(data[0])
-        })
+          setUserImageUrl(user?.image?.image?.asset?.url) 
+          setIsUserExist(true)
+          setIsLoading(false)
+        }) 
     }
-    console.log('userInfo2', user );
   }, [])
 
   useEffect(() => {
     scrollRef.current.scrollTo(0,0)
   }, [])
-  
-  
+
+  console.log('userquery info result in Home.jsx', userInfo);
+  console.log('userInfo in Home.jsx', user);
+
   return (
     <div className="flex flex-col">
       <div className='flex bg-gray-50 md:flex-row flex-col h-screen transition-height duration-75 ease-out'>
@@ -57,6 +64,7 @@ const Home = () => {
           <Sidebar user={user && user}/>
         </div>
         
+        {/* 모바일 크기에 flex-col으로 보여주는 UI */}
         <div className="flex md:hidden flex-row">
           <div className="p-2 w-full flex flex-row justify-between items-center shadow-md">
             <HiMenu fontSize={40} className='cursor-pointer' onClick={() => setToggleSidebar(true)} />
@@ -64,13 +72,16 @@ const Home = () => {
               <img src={logo} alt="logo" className='w-28' />
             </Link>
             {isUserExist ?
+              userImageUrl &&
               <Link to={`user-profile/${user?._id}`} >
-                <img src={user?.image} alt="user-image" className='w-9 h-9 rounded-full' />
-              </Link> :
+                <img src={userImageUrl} alt="user-image" className='w-9 h-9 rounded-full' />
+              </Link>:
               <Link to={'/signin'}>
                 <button className=' flex items-center w-15 text-gray-500'>로그인</button>
               </Link>}
           </div>
+
+          {/* 모바일 사이즈 이상이 될때 Sidebar를 보여주는 UI */}
           {toggleSidebar && (
           <div className="fixed w-1/2 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in">
             <div className="absolute w-full flex justify-end items-center p-2">

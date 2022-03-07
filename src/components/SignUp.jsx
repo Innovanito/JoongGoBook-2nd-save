@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -14,14 +14,33 @@ import { useNavigate} from 'react-router-dom'
 import logo from '../assets/logo.png'
 import Spinner from './Spinner';
 
+import { bringDefaultImage } from '../utils/data'
+
+
 
 const Signup = () => {
   // 계정 생성하는 동안 Spinner를 보여주냐 아니면 보여주지 말냐 결정하는 Boolean 변수
   const [addingAccountInfo, setAddingAccountInfo] = useState(false)
   //계정의 항목을 다 작성했는지 안 했는지 알려주는 Boolean 변수
   const [fields, setFields] = useState(false)
+  const [defaultImage, setDefaultImage] = useState('')
+
 
   const navigate = useNavigate()
+
+    useEffect(() => {
+    //sanity client에 있는 user-icon의 url을 가져오는 함수
+    const queryBringImage = bringDefaultImage()
+
+    if (queryBringImage) {
+      client
+        .fetch(queryBringImage)
+        .then((data) => {
+          setDefaultImage(data[0])
+          console.log('imageData', defaultImage );
+        })
+    }
+  }, [])
 
 
   const handleSubmit = (event) => {
@@ -36,14 +55,15 @@ const Signup = () => {
       userId : data.get('userId'),
       password : data.get('password'),
       userNickname  : data.get('userNickname'),
-      userEmail : data.get('userEmail')
+      userEmail: data.get('userEmail'),
+      image: defaultImage
     }
 
     if (doc.userId && doc.password && doc.userNickname && doc.userEmail) {
       client.create(doc)
         .then(() => {
           setAddingAccountInfo(false)
-          navigate('/')
+          navigate('/signin')
         })
     } else {
       setFields(true)

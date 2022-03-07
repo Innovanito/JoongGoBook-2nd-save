@@ -18,7 +18,7 @@ import GoogleLogin from 'react-google-login'
 import { client } from '../client'
 
 import logo from '../assets/logo.png'
-import userIcon from '../assets/user-icon.png'
+
 import { accountIdAndPw } from '../utils/data'
 
 // 만들어야할 기능들
@@ -27,11 +27,12 @@ import { accountIdAndPw } from '../utils/data'
 
 const Signin = () => {
   const navigate = useNavigate()
+  const [defaultImage, setDefaultImage] = useState('')
   const [idNotExist, setIdNotExist] = useState(false) //아직 안씀
   const [isLoading, setIsLoading] = useState(false)// 이 변수는 썼는데 아직 Spinner.jsx를 안 씀
   const [isPwWrong, setIsPwWrong] = useState(false)//아직 안씀
     //Google으로 로그인을 했는지 아니면 MyWeb으로 로그인을 했는지 - 값의 형태는 Boolean
-  const [isMyAccount, setIsMyAccount] = useState(null)
+  // const [isMyAccount, setIsMyAccount] = useState(null)
 
   const responseGoogle = (response) => {
     localStorage.setItem('user', JSON.stringify(response.profileObj))
@@ -50,6 +51,9 @@ const Signin = () => {
       })
   }
 
+
+  
+
   const handleSubmit = (event) => {
     setIsLoading(true)
     event.preventDefault();
@@ -59,19 +63,16 @@ const Signin = () => {
     const password = data.get('password')
 
     const query = accountIdAndPw(userId)
+
+
     if (query) {
       client.fetch(query)
         .then((data) => {
-        
           if (data[0]?.password) {
-            setIsMyAccount('MyWeb')
-            console.log('value of isMyAccount', isMyAccount);
             const doc = {
               _id: userId,
               _type: 'user',
               userName: data[0].userNickname,
-              image: userIcon,
-              isMyAccount
             }
             localStorage.setItem('user', JSON.stringify(doc))
             setIsLoading(false)

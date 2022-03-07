@@ -11,16 +11,23 @@ const PinDetail = ({user}) => {
   const [comment, setComment] = useState('')
   const [addingComment, setAddingComment] = useState(false)
   const { pinId } = useParams()
+  const [isGoogleAccount, setIsGoogleAccount] = useState(pinDetail?.postedBy?._id)
+  const [postUserName, setPostUserName] = useState(null)
+
   
   const fetchPinDetails = () => {
     const query = pinDetailQuery(pinId)
     if (query) {
       client.fetch(query)
         .then((data) => {
+          console.log('data info', data[0]);
           setPinDetail(data[0])
         })
     }
   }
+
+
+  console.log('info of pindetail', pinDetail);
   
   const addComment = () => {
     if (comment) {
@@ -68,18 +75,19 @@ const PinDetail = ({user}) => {
         <p className='mt-3'>{pinDetail.about}</p>
       </div>
       <Link to={`user-profile/${pinDetail.postedBy?._id}`} className='flex gap-2 mt-5 items-center bg-white rounded-lg' >
-        <img className='w-8 h-8 rounded-full object-cover' src={pinDetail.postedBy?.image} alt="user-profile" />
+        {isGoogleAccount && <img className='w-8 h-8 rounded-full object-cover' src={pinDetail.postedBy?.image} alt="user-profile" />}
         <p className='font-semibold p-2'>{pinDetail.postedBy?.userName}</p>
       </Link>
       <h2 className='mt-5 text-2xl'>댓글들</h2>
       <div className="max-h-370 overflow-y-auto">
         {pinDetail?.comments?.map((comment, i) => (
           <div className="flex gap-2 mt-5 items-center bg-white rounded-lg" key={i} >
-            <img
+            {isGoogleAccount &&
+              <img
               src={comment.postedBy.image}
               alt="user-profile"
               className='w-10 h-10 rounded-full cursor-pointer'
-            />
+            />}
             <div className="flex flex-col">
               <p className='font-bold'>{comment.postedBy.userName}</p>
               <p>{comment.comment}</p>
@@ -89,11 +97,11 @@ const PinDetail = ({user}) => {
       </div>
       <div className="flex flex-wrap mt-6 gap-3">
         <Link to={`user-profile/${pinDetail.postedBy?._id}`}  >
-          <img
+          {isGoogleAccount && <img
             className='w-8 h-8 rounded-full cursor-pointer'
             src={pinDetail.postedBy?.image}
             alt="user-profile"
-          />
+          />}
         </Link>
         <input
           type="text"

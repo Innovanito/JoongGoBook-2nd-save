@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {NavLink, Link} from 'react-router-dom'
 import {RiHomeFill} from 'react-icons/ri'
 import {categories} from '../utils/data'
@@ -13,10 +13,23 @@ const isActiveStyle = 'flex items-center px-5 gap-3 font-extrabold border-r-2  t
 
 const Sidebar = ({ user, closeToggle }) => {
   const [isActive, setIsActive] = useState(false)
-  
+  const [userImage, setUserImage] = useState('')
+  const [userDisplayName, setUserDisplayName] = useState('')  
+
   const handleCloseSidebar = () => {
     if(closeToggle) closeToggle(false)
   }
+
+  // useEffect(() => {
+  //   if (user.userNickname) {
+  //     setUserDisplayName(user.userNickname)
+  //   } else {
+  //     setUserDisplayName(user.userName)
+  //   }
+  // }, [user])
+  
+
+  // console.log('In Sidebar User Info', user);
 
   return (
     <div className="flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar shadow-xl border-x-2">
@@ -78,8 +91,8 @@ const Sidebar = ({ user, closeToggle }) => {
           className='flex my-5 mb-3 gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3 '
           onClick={handleCloseSidebar}
         >
-          <img src={user.image} alt="user-image" className='w-10 h-10 rounded-full' />
-          <p>{user.userName}</p>
+          {userImage && <img src={user?.image} alt="user-image" className='w-10 h-10 rounded-full' />}
+          {/* <p>{userDisplayName}</p> */}
         </Link>
       )}
     </div>

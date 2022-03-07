@@ -22,8 +22,12 @@ const CreatePin = ({user}) => {
   const [fields, setFields] = useState(null)
   const [imageAsset, setImageAsset] = useState(null)
   const [wrongImageType, setWrongImageType] = useState(false)
+  const [isGoogleAccount, setIsGoogleAccount] = useState(user?.googleId) // true일 때는 google account이고, undefined일 때는 내 웹을 통한 account
 
   const navigate = useNavigate()
+
+          console.log('userInfo in CreatePin.jsx',user);
+
 
   const uploadImage = (e) => {
     //업로드할 이미지의 데이터를 type과 name으로 구조분해한거임
@@ -40,7 +44,7 @@ const CreatePin = ({user}) => {
           setLoading(false)
         })
         .catch((error) => {
-          console.log('이미지 업로드에 문제가 생겼습니다', error)
+          error('이미지 업로드에 문제가 생겼습니다 업로드하는 이미지의 종류를 확인해주세요', error)
         })
     } else {
       setWrongImageType(true)
@@ -48,28 +52,52 @@ const CreatePin = ({user}) => {
   }
 
   const savePin = () => {
-    if (title && about && imageAsset?._id) {
-      const doc = {
-        _type: 'pin',
-        title,
-        about,
-        image: {
-          _type: 'image',
-          asset: {
-            _type: 'reference',
-            _ref: imageAsset?._id
+      if (title && about && imageAsset?._id) {
+      if (isGoogleAccount) {
+        const doc = {
+          _type: 'pin',
+          title,
+          about,
+          image: {
+            _type: 'image',
+            asset: {
+              _type: 'reference',
+              _ref: imageAsset?._id
+            }
+          },
+          userId: user._id,
+          postedBy: {
+            _type: 'postedBy',
+            _ref: user._id,
           }
-        },
-        userId: user._id,
-        postedBy: {
-          _type: 'postedBy',
-          _ref: user._id,
         }
+        client.create(doc)
+          .then(() => {
+            navigate('/')
+          })
+      } else {
+          const doc = {
+            _type: 'pin',
+            title,
+            about,
+            image: {
+              _type: 'image',
+              asset: {
+                _type: 'reference',
+                _ref: imageAsset?._id
+              }
+            },
+            userId: user?._id,
+            postedBy: {
+              _type: 'postedBy',
+              _ref: user?._id,
+            }
+          }
+          client.create(doc)
+            .then(() => {
+              navigate('/')
+            })
       }
-      client.create(doc)
-        .then(() => {
-          navigate('/')
-        })
     } else {
       setFields(true)
       setTimeout(() => {
@@ -111,7 +139,7 @@ const CreatePin = ({user}) => {
               </label>
             ) : (
                 <div className="relative h-full">
-                  <img src={imageAsset?.url} alt="uploaded-pic!" className='h-full w-full' />
+                  {/* <img src={imageAsset?.url} alt="uploaded-pic!" className='h-full w-full' /> */}
                   <button
                     type='button'
                     className='absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out'
@@ -133,7 +161,7 @@ const CreatePin = ({user}) => {
           />
           {user && (
             <div className="flex gap-2 items-center my-2 bg-white rounded-lg">
-              <img src={user.image} alt="user-image" className='w-10 h-10 rounded-full' />
+              {/* <img src={user.image} alt="user-image" className='w-10 h-10 rounded-full' /> */}
               <p className='font-bold'>{user.userName}</p>
             </div>
           )}
