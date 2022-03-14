@@ -101,14 +101,3 @@ const Sidebar = ({ user, closeToggle }) => {
 
 export default Sidebar
 
-//Sidebar에서 Category를 map 돌리는 파트
-// {categories.map((category) => (
-//             <NavLink
-//               to={`/category/${category.name}`}
-//               className={({isActive}) => isActive ? isActiveStyle : isNotActiveStyle}
-//               onClick={handleCloseSidebar}
-//               key={category.name}
-//             >
-//               {category.name}
-//               </NavLink>
-//           ))}

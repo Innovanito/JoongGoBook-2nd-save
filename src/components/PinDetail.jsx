@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useParams, NavLink} from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 
 import { client,urlFor} from '../client'
 import { pinDetailQuery} from '../utils/data'
-import Spinner from  './Spinner'
+import Spinner from './Spinner'
+
+import schoolLogo from '../assets/school.png'
+import moneyIcon from '../assets/money-icon.png'
+
 
 const PinDetail = ({user}) => {
   const [pinDetail, setPinDetail] = useState(null)
@@ -25,9 +29,6 @@ const PinDetail = ({user}) => {
         })
     }
   }
-
-
-  console.log('info of pindetail', pinDetail);
   
   const addComment = () => {
     if (comment) {
@@ -57,11 +58,14 @@ const PinDetail = ({user}) => {
     fetchPinDetails()
   }, [pinId])
 
+  console.log('info of pindetail', pinDetail);
+
+
   if(!pinDetail) return <Spinner message='상품을 불러오고있습니다' />
-  
+
   return (
     <div className='flex flex-col m-auto pl-8 mt-3 bg-white' style={{ maxWidth: '1500px', borderRadius: '32px'}}>
-      <div className="flex justify-center items-center flex-initial w-350">
+      <div className="flex justify-center items-center w-350">
         <img
           src={pinDetail?.image && urlFor(pinDetail?.image).url()}
           alt="pin-image"
@@ -69,15 +73,28 @@ const PinDetail = ({user}) => {
         />
       </div>
       <div>
+        <div className="flex mt-3">
+          <img src={schoolLogo} alt="school-logo" className='mr-3' /> 
+          {pinDetail.category}
+        </div>
+        <div className="flex mt-2 items-center">
+          <img src={moneyIcon} alt="money-icon" className='mr-3 w-7' />
+          <div className="text-lg">{pinDetail.price} 원</div> 
+        </div>
         <h1 className='text-4xl font-bold break-words mt-3'>
           {pinDetail.title}
         </h1>
         <p className='mt-3'>{pinDetail.about}</p>
       </div>
-      <Link to={`user-profile/${pinDetail.postedBy?._id}`} className='flex gap-2 mt-5 items-center bg-white rounded-lg' >
+      {/* 이 부분을 수정해서 Link의 이동을 제어해야하는데 어캐하는지 모르것음 몰라서 그냥 NavLink를 안쓰고 h1태그를 씀 */} 
+      {/* <NavLink to={`user-profile/${pinDetail.postedBy?._id}`} className='flex gap-2 mt-5 items-center bg-white rounded-lg' >
         {isGoogleAccount && <img className='w-8 h-8 rounded-full object-cover' src={pinDetail.postedBy?.image} alt="user-profile" />}
-        <p className='font-semibold p-2'>{pinDetail.postedBy?.userName}</p>
-      </Link>
+        <p className='font-semibold p-2'> <span className=' font-extrabold text-gray-500'>게시자:</span> {pinDetail.postedBy?.userName}</p>
+      </NavLink> */}
+      <h1 to={`user-profile/${pinDetail.postedBy?._id}`} className='flex gap-2 mt-5 items-center bg-white rounded-lg' >
+        {isGoogleAccount && <img className='w-8 h-8 rounded-full object-cover' src={pinDetail.postedBy?.image} alt="user-profile" />}
+        <p className='font-semibold p-2'> <span className=' font-extrabold text-gray-500'>게시자:</span> {pinDetail.postedBy?.userName}</p>
+      </h1>
       <h2 className='mt-5 text-2xl'>댓글들</h2>
       <div className="max-h-370 overflow-y-auto">
         {pinDetail?.comments?.map((comment, i) => (

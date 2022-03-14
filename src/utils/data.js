@@ -20,6 +20,12 @@ export const userQueryForMyAccount = (userId) => {
   return query
 }
 
+export const userQueryForMyAccount2 = (userId) => {
+  const query =`*[_type == "accountInfo" && _id == '${userId}']`
+
+  return query
+}
+
 export const bringDefaultImage = () => {
   const query =`*[_type == "defaultImage" && title match 'userIcon'] {
     image {
@@ -40,6 +46,7 @@ export const searchQuery = (searchTerm) => {
       }
     },
     _id,
+    price,
     destination,
     postedBy -> {
       _id,
@@ -71,6 +78,7 @@ export const feedQuery = `*[_type == 'pin'] | order(_createAt desc) {
     image
   },
   title,
+  price,
   save[] {
     _key,
     postedBy -> {
@@ -88,6 +96,7 @@ export const pinDetailQuery = (pinId) => {
         url
       }
     },
+    price,
     _id,
     title,
     about,
@@ -126,6 +135,8 @@ export const userCreatedPinsQuery = (userId) => {
     },
     _id,
     destination,
+    price,
+    title,
     postedBy -> {
       _id,
       userName,
@@ -150,6 +161,8 @@ export const userSavedPinsQuery = (userId) => {
       }
     },
     _id,
+    title,
+    price,
     destination,
     postedBy ->{
       _id,
@@ -180,6 +193,7 @@ export const accountIdAndPw = (userId) => {
 
 //260개 정도 목록이 있음
 export const univList = [
+  '없음',
   '가야대학교',
   '가천대학교',
   '가톨릭관동대학교',

@@ -23,14 +23,16 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false) //로딩중을 나타내는 Boolean 변수
   const [userImageUrl, setUserImageUrl] = useState('')
 
+  console.log('userInfo', userInfo);
 
   useEffect(() => {
     setIsLoading(true)
 
     if (userInfo?.googleId) {
-
       const query = userQuery(userInfo?.googleId) 
+
       client
+        .fetch(query)
         .then((data) => {
           setUser(data[0])
           setUserImageUrl(user?.image)
@@ -54,8 +56,7 @@ const Home = () => {
     scrollRef.current.scrollTo(0,0)
   }, [])
 
-  console.log('userquery info result in Home.jsx', userInfo);
-  console.log('userInfo in Home.jsx', user);
+  console.log('user info in Home.jsx', user);
 
   return (
     <div className="flex flex-col">
@@ -81,7 +82,7 @@ const Home = () => {
               </Link>}
           </div>
 
-          {/* 모바일 사이즈 이상이 될때 Sidebar를 보여주는 UI */}
+          {/* 웹 사이즈 일때 (모바일 사이즈 이상이 될때) Sidebar를 보여주는 UI */}
           {toggleSidebar && (
           <div className="fixed w-1/2 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in">
             <div className="absolute w-full flex justify-end items-center p-2">
@@ -91,9 +92,10 @@ const Home = () => {
           </div>
           )}
         </div>
+        {/* Sidebar.jsx 옆에 보여지는 창 */}
         <div className="pb-2 flex-1 h-screen overflow-y-scroll" ref={scrollRef}>
           <Routes>
-            <Route path='/user-profile/:userId' element={<UserProfile />} />
+            <Route path='/user-profile/:userId' element={<UserProfile user={user && user} />} />
             <Route path='/*' element={<Pins user={user && user} />} />
           </Routes>
         </div>

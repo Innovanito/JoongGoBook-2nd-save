@@ -3,33 +3,49 @@ import { AiOutlineLogout } from 'react-icons/ai';
 import { useParams, useNavigate } from 'react-router-dom';
 import { GoogleLogout } from 'react-google-login';
 
-import { userCreatedPinsQuery, userQuery, userSavedPinsQuery } from '../utils/data';
+import { userCreatedPinsQuery, userQuery, userQueryForMyAccount2, userSavedPinsQuery } from '../utils/data';
 import { client } from '../client';
 import MasonryLayout from './MasonryLayout';
 import Spinner from './Spinner';
+import userIcon from '../assets/user-icon.png'
 
 const randomImage = 'https://source.unsplash.com/1600x900/?library'
 
 const activeBtnStyles = 'bg-red-500 text-white font-bold p-2 rounded-full w-35 outline-none';
-const notActiveBtnStyles = 'bg-primary mr-4 text-black font-bold p-2 rounded-full w-35 outline-none';
+const notActiveBtnStyles = 'mr-4 text-black font-bold p-2 rounded-full w-35 outline-none opacity-50';
 
-const UserProfile = () => {
-  const [user, setUser] = useState()
+const UserProfile = ({user}) => {
   const [pins, setPins] = useState()
   const [text, setText] = useState('Created') //'Created' or 'Saved'
   const [activeBtn, setActiveBtn] = useState('created')
+  const [isGoogleAccount, setIsGoogleAccount] = useState(user?.googleId)
 
   const navigate = useNavigate()
-  const {userId} = useParams()
+  const { userId } = useParams()
 
-  useEffect(() => {
-    const query = userQuery(userId)
+  // useEffect(() => {
+  //   let query = userQueryForMyAccount2(userId) 
+    
+  //   // 이 부분에서 잘못됨
+  //   client
+  //   .fetch(query)
+  //   .then((data) => {
+  //     setUser(data[0])
+  //     console.log('userData in loop', user);
+  //       setIsGoogleAccount(false)
+  //     })
+  //   if (isGoogleAccount) {
+  //     query = userQuery(userId);
+  //     client
+  //       .fetch(query)
+  //       .then((data) => {
+  //         setUser(data[0])
+  //         setIsGoogleAccount(false)
+  //       })
+  //     .catch('error occured')
+  //   }
 
-    client.fetch(query)
-      .then((data) => {
-        setUser(data[0])
-      })
-  }, [userId])
+  // }, [userId])
 
   useEffect(() => {
     if (text === 'Created') {
@@ -54,7 +70,8 @@ const UserProfile = () => {
     localStorage.clear()
     navigate('/signin')
   }
-  
+  console.log('userInfo in userprofile.jsx', user);
+  console.log('pins in userprofile.jsx', pins);
 
   if (!user) {
     return <Spinner message='페이지 로딩중...' />
@@ -71,7 +88,7 @@ const UserProfile = () => {
               className='w-full h-370 2xl:h-510 shadow-lg object-cover'
             />
             <img
-              src={user.image}
+              src={userIcon}
               alt="user-pic"
               className='rounded-full w-20 h-20 -mt-10 shadow-xl object-cover'
             />
@@ -85,17 +102,19 @@ const UserProfile = () => {
                   render={(renderProps) => (
                     <button
                       type='button'
-                      className='bg-white p-2 rounded-full cursor-pointer outline-none shadow-md'
+                      className='bg-white flex flex-col items-center justify-center p-2 rounded-full cursor-pointer outline-none shadow-md'
                       onClick={renderProps.onClick}
                       disabled={renderProps.disabled}
                     >
                       <AiOutlineLogout color='red' />
+                      <span className=' text-xs'>로그아웃</span>
                     </button>
                   )}
                   onLogoutSuccess={logout}
                   cookiePolicy='single_host_origin'
                 />
               )}
+              
             </div>
           </div>
           <div className="text-center mb-7">

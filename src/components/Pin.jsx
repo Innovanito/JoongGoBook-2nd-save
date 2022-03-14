@@ -5,9 +5,10 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {client, urlFor } from '../client'
 import { fetchUser } from '../utils/fetchUser'
+import moneyIcon from '../assets/money-icon.png'
 
 const Pin = ({ pin}) => {
-  const {postedBy, image, _id, save, title} = pin
+  const {postedBy, image, _id, save, title, price} = pin
   const [postHovered, setPostHovered] = useState(false)
   const [savingPost, setSavingPost] = useState(false)
 
@@ -15,7 +16,7 @@ const Pin = ({ pin}) => {
   const user = fetchUser()
 
   //핀의 정보가 저장되어 있는지 아닌지 Boolean의 값으로 저장하는 변수
-  let alreadySaved = !!(save?.filter((item) => item.postedBy._id === user.googleId))?.length
+  let alreadySaved = !!(save?.filter((item) => item?.postedBy?._id === user.googleId))?.length
 
   const savePin = (id) => {
     if (!alreadySaved) {
@@ -40,7 +41,7 @@ const Pin = ({ pin}) => {
     }
   }
 
-
+  console.log('pin info in Pin.jsx', pin);
 
   return (
     <div className='m-2'>
@@ -86,8 +87,12 @@ const Pin = ({ pin}) => {
         )}
       </div>
       <div className="flex flex-col p-1">
-        <Link to='/pin-detail/:pinId' className='flex gap2 mt-2 items-center' >
+        <Link to='/pin-detail/:pinId' className='flex flex-col gap2 mt-2 ' >
           <p className='p-2'>{title}</p>
+          <div className="flex">
+            <img src={moneyIcon} alt="money-icon" className='w-7' />
+            <span>{price} 원</span>
+          </div>
         </Link>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from '../assets/logo.png'
+import { Link } from 'react-router-dom'
 
 const NotFound = () => {
   return (
@@ -8,6 +9,9 @@ const NotFound = () => {
         <img src={logo} alt="logo" />
       </div>
       <div className=' text-5xl '>이 페이지는 존재하지 않습니다</div>
+      <Link to='/' className=' mt-6 text-4xl text-green-500'>
+        메인 페이지로 돌아가기
+      </Link>
     </div>  
   )
 }

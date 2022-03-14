@@ -15,6 +15,7 @@ const Feed = () => {
     setLoading(true)
 
     if (categoryId) {
+      setLoading(true)
       const query = searchQuery(categoryId)
 
       client.fetch(query)
@@ -38,7 +39,7 @@ const Feed = () => {
     <div>
       {
         (pins?.length === 0) ? 
-          <div className="flex justify-center items-center text-xl font-bold">
+          <div className="flex justify-center items-center text-xl font-bold mt-4">
             찾으시는 게시물이 존재하지 않습니다
           </div> :
           pins && <MasonryLayout pins={pins}/>

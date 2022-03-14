@@ -5,6 +5,7 @@ import { useNavigate} from 'react-router-dom'
 
 import {client} from '../client'
 import Spinner from './Spinner'
+import { univList } from '../utils/data'
 
 // 무조건 추가해야할 기능들
 //1. 제품의 상품명이 Pin.jsx에 넣어줄 수 있어야 함
@@ -23,11 +24,10 @@ const CreatePin = ({user}) => {
   const [imageAsset, setImageAsset] = useState(null)
   const [wrongImageType, setWrongImageType] = useState(false)
   const [isGoogleAccount, setIsGoogleAccount] = useState(user?.googleId) // true일 때는 google account이고, undefined일 때는 내 웹을 통한 account
+  const [univValue, setUnivValue] = useState('')
+  const [price, setPrice] = useState('')
 
   const navigate = useNavigate()
-
-          console.log('userInfo in CreatePin.jsx',user);
-
 
   const uploadImage = (e) => {
     //업로드할 이미지의 데이터를 type과 name으로 구조분해한거임
@@ -41,10 +41,11 @@ const CreatePin = ({user}) => {
         .upload('image', e.target.files[0], { contentType: type, filename: name})
         .then((document) => {
           setImageAsset(document)
+          console.log('image info', document);
           setLoading(false)
         })
         .catch((error) => {
-          error('이미지 업로드에 문제가 생겼습니다 업로드하는 이미지의 종류를 확인해주세요', error)
+          alert('이미지 업로드에 문제가 생겼습니다 업로드하는 이미지의 종류를 확인해주세요', error)
         })
     } else {
       setWrongImageType(true)
@@ -52,12 +53,14 @@ const CreatePin = ({user}) => {
   }
 
   const savePin = () => {
-      if (title && about && imageAsset?._id) {
+      if (title && about && imageAsset?._id && price) {
       if (isGoogleAccount) {
         const doc = {
           _type: 'pin',
           title,
           about,
+          price,
+          category: univValue,
           image: {
             _type: 'image',
             asset: {
@@ -80,6 +83,8 @@ const CreatePin = ({user}) => {
             _type: 'pin',
             title,
             about,
+            price,
+            category: univValue,
             image: {
               _type: 'image',
               asset: {
@@ -139,7 +144,7 @@ const CreatePin = ({user}) => {
               </label>
             ) : (
                 <div className="relative h-full">
-                  {/* <img src={imageAsset?.url} alt="uploaded-pic!" className='h-full w-full' /> */}
+                  <img src={imageAsset?.url} alt="uploaded-pic!" className='h-full w-full' />
                   <button
                     type='button'
                     className='absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out'
@@ -172,6 +177,30 @@ const CreatePin = ({user}) => {
             placeholder='제품의 설명을 넣어주세요'
             className='sm:text-lg border-b-2 border-gray-200 p-2 h-40'
           />
+          <input
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(parseInt(e.target.value))}
+            placeholder='가격을 입력해주세요(원)'
+            className='outline-none text-md sm:text-xl font-bold border-b-2 border-gray-200 p-2'
+          />
+          <div className="flex justify-between bg-gray-50 rounded-lg p-1">
+            <div className="flex items-center">
+              다니는 대학교를 선택해주세요
+            </div>
+            <div className="flex mr-5 p-2 items-center">
+              <select  name="univ-list" value={univValue} onChange={e => setUnivValue(e.target.value)}>
+                <option value="none" defaultValue disabled hidden>대학 항목을 선택해주세요</option>
+                {/* univ의 값을 Feed.jsx에 categoryId로 넘겨줘야 한다 */}
+                {univList.map(univ => (
+                  <option
+                    value={univ}
+                    key={univ}
+                  >{univ}</option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div className="felx flex-col">
             <div className="flex justify-end items-end mt-5">
               <button

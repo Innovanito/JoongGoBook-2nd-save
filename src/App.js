@@ -11,6 +11,7 @@ const App = () => {
       <Route exact path='/*' element={ <Home />} />
       <Route path='/signin' element={<Signin />} />
       <Route path='/signup' element={<Signup />} />
+      {/* NotFound component가 재대로 동작하지 않는다 */}
       <Route element={ <NotFound />} />
     </Routes>
   )
