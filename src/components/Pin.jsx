@@ -16,7 +16,7 @@ const Pin = ({ pin}) => {
   const user = fetchUser()
 
   //핀의 정보가 저장되어 있는지 아닌지 Boolean의 값으로 저장하는 변수
-  let alreadySaved = !!(save?.filter((item) => item?.postedBy?._id === user.googleId))?.length
+  let alreadySaved = !!(save?.filter((item) => item?.postedBy?._id === user?.googleId))?.length
 
   const savePin = (id) => {
     if (!alreadySaved) {
@@ -27,10 +27,10 @@ const Pin = ({ pin}) => {
         .setIfMissing({ save: []})
         .insert('after', 'save[-1]', [{
           _key: uuidv4(),
-          userId: user.googleId,
+          userId: user?.googleId,
           postedBy: {
             _type: 'postedBy',
-            _ref: user.googleId
+            _ref: user?.googleId
           }
         }])
         .commit()
