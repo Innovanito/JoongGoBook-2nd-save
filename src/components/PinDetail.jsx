@@ -113,27 +113,33 @@ const PinDetail = ({user}) => {
         ))}
       </div>
       <div className="flex flex-wrap mt-6 gap-3">
-        <Link to={`user-profile/${pinDetail.postedBy?._id}`}  >
-          {isGoogleAccount && <img
-            className='w-8 h-8 rounded-full cursor-pointer'
-            src={pinDetail.postedBy?.image}
-            alt="user-profile"
-          />}
-        </Link>
-        <input
-          type="text"
-          className='flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300'
-          placeholder='댓글을 달아주세요'
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <button
-          type='button'
-          className='bg-red-500 text-white rounded-full px-6 py-2 font-semibold text-base outline-none'
-          onClick={addComment}
-        >
-          {addingComment ? '게시물에 댓글 게시 중...' : '댓글 게시하기'}
-        </button>
+        {user ? (
+          <div className="flex">
+            <Link to={`user-profile/${pinDetail.postedBy?._id}`}  >
+              {isGoogleAccount && <img
+                className='w-8 h-8 rounded-full cursor-pointer'
+                src={pinDetail.postedBy?.image}
+                alt="user-profile"
+              />}
+            </Link>
+            <input
+              type="text"
+              className='flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300'
+              placeholder='댓글을 달아주세요'
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <button
+              type='button'
+              className='bg-red-500 text-white rounded-full px-6 py-2 font-semibold text-base outline-none'
+              onClick={addComment}
+            >
+              {addingComment ? '게시물에 댓글 게시 중...' : '댓글 게시하기'}
+            </button> 
+          </div>
+        ) : (
+          <h1 className=' flex items-center text-gray-400 mb-2'> 댓글 게시를 위해 로그인을 해주세요</h1>
+        )}
       </div>
     </div>
   )

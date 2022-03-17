@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Nanum Gothic', cursive;
+  font-family: 'Nanum Gothic', sans-serif;
 }
 
 .hide-scrollbar::-webkit-scrollbar {

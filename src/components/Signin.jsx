@@ -137,7 +137,7 @@ const Signin = () => {
         <Grid container>
           <Grid item xs>
             <Link>
-              비밀번호 찾기
+              {/* 비밀번호 찾기 */}
             </Link>
           </Grid>
           <Grid item>
@@ -170,3 +170,6 @@ const Signin = () => {
 }
 
 export default Signin
+
+
+

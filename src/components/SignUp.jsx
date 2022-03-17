@@ -99,7 +99,7 @@ const Signup = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  autoComplete="given-name"
+                  autoComplete="username"
                   name="userId"
                   required
                   fullWidth
@@ -118,7 +118,7 @@ const Signup = () => {
                   label="비밀번호"
                   type="password"
                   id="password"
-                  autoComplete="new-password"
+                  autoComplete="username"
                 />
               </Grid>
               <Grid item xs={12}>
