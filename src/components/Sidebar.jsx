@@ -75,26 +75,18 @@ const Sidebar = ({ user, closeToggle }) => {
               </NavLink>
           </div>
           <div>
-            <NavLink
-              to={`/user-profile/${user?._id}`}
-              className={isActiveStyle}
-              onClick={handleCloseSidebar}
-            >
-              {categories[2].name}
+            {user && 
+              <NavLink
+                to={`/user-profile/${user?._id}`}
+                className={isActiveStyle}
+                onClick={handleCloseSidebar}
+              >
+                {categories[2].name}
               </NavLink>
+            }
           </div>
         </div>
       </div>
-      {user && (
-        <Link
-          to={`user-profile/${user._id}`}
-          className='flex my-5 mb-3 gap-2 p-2 items-center bg-white rounded-lg shadow-lg mx-3 '
-          onClick={handleCloseSidebar}
-        >
-          {userImage && <img src={user?.image} alt="user-image" className='w-10 h-10 rounded-full' />}
-          {/* <p>{userDisplayName}</p> */}
-        </Link>
-      )}
     </div>
   )
 }

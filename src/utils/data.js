@@ -46,6 +46,7 @@ export const searchQuery = (searchTerm) => {
       }
     },
     _id,
+    title,
     price,
     destination,
     postedBy -> {
