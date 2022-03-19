@@ -65,15 +65,17 @@ const Sidebar = ({ user, closeToggle }) => {
               {categories[0].name}
               </NavLink>
           </div>
+          {user && 
           <div>
             <NavLink
               to={'/create-pin'}
               className={isActiveStyle}
-              onClick={handleCloseSidebar}
+              onClick={ handleCloseSidebar }
             >
               {categories[1].name}
-              </NavLink>
+            </NavLink>
           </div>
+          }
           <div>
             {user && 
               <NavLink
