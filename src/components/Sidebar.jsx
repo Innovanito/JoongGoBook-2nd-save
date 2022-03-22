@@ -43,7 +43,7 @@ const Sidebar = ({ user, closeToggle }) => {
             <img src={logo} alt="logo" className='w-full' />
           </Link>
           <h1 className=' text-gray-400 mb-7'>
-            대학생 중고 교제 거래
+            대학생 중고 교재 거래
           </h1>
         </div>
         <div className="flex flex-col gap-5">

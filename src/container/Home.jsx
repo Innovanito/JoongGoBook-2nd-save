@@ -23,7 +23,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false) //로딩중을 나타내는 Boolean 변수
   const [userImageUrl, setUserImageUrl] = useState('')
 
-  console.log('userInfo', userInfo);
 
   useEffect(() => {
     setIsLoading(true)
@@ -56,7 +55,6 @@ const Home = () => {
     scrollRef.current.scrollTo(0,0)
   }, [])
 
-  console.log('user info in Home.jsx', user);
 
   return (
     <div className="flex flex-col">

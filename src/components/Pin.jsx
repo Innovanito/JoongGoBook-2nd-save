@@ -7,7 +7,7 @@ import {client, urlFor } from '../client'
 import { fetchUser } from '../utils/fetchUser'
 import moneyIcon from '../assets/money-icon.png'
 
-const Pin = ({ pin}) => {
+const Pin = ({ pin , isUserProfile}) => {
   const {postedBy, image, _id, save, title, price} = pin
   const [postHovered, setPostHovered] = useState(false)
   const [savingPost, setSavingPost] = useState(false)
@@ -41,7 +41,10 @@ const Pin = ({ pin}) => {
     }
   }
 
-  console.log('pin info in Pin.jsx', pin);
+  const pinToPinSold = () => {
+    
+  }
+  console.log('info of isUerprofile', isUserProfile);
 
   return (
     <div className='m-2'>
@@ -94,6 +97,14 @@ const Pin = ({ pin}) => {
             <span>{price} 원</span>
           </div>
         </Link>
+        {isUserProfile &&
+          <button
+            className=' border-2'
+            onClick={pinToPinSold}
+          >
+            거래완료로 변경
+          </button>
+        }
       </div>
     </div>
   )

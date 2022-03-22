@@ -19,6 +19,7 @@ const UserProfile = ({user}) => {
   const [text, setText] = useState('Created') //'Created' or 'Saved'
   const [activeBtn, setActiveBtn] = useState('created')
   const [isGoogleAccount, setIsGoogleAccount] = useState(user?.googleId)
+  const [isUserProfile, setIsUserProfile] = useState(true)
 
   const navigate = useNavigate()
   const { userId } = useParams()
@@ -70,12 +71,12 @@ const UserProfile = ({user}) => {
     localStorage.clear()
     navigate('/signin')
   }
-  console.log('userInfo in userprofile.jsx', user);
-  console.log('pins in userprofile.jsx', pins);
 
   if (!user) {
     return <Spinner message='페이지 로딩중...' />
   }
+
+  console.log('info of isUserProfile in UserProfile.jsx ', isUserProfile);
 
   return (
     <div className='relative pb-2 h-full justify-center items-center'>
@@ -140,7 +141,7 @@ const UserProfile = ({user}) => {
             </button>
           </div>
           <div className="px-2">
-            <MasonryLayout pins={pins} />
+            <MasonryLayout pins={pins} isUserProfile={isUserProfile} />
           </div>
           {pins?.length === 0 && (
             <div className="flex justify-center font-bold items-center w-full text-xl mt-2">

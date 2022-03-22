@@ -67,6 +67,7 @@ const Signup = () => {
         })
     } else {
       setFields(true)
+      setAddingAccountInfo(false)
       setTimeout(() => {
         setFields(false)
       },2000)
@@ -91,7 +92,7 @@ const Signup = () => {
             회원가입
           </Typography>
           {fields && (
-            <p className='text-red-500 mb-5 text-xl text-center transition-all duration-150 ease-in'>양식의 항목을 다 작성해주세요!</p>
+            <p className='text-red-500 mb-5 text-center transition-all duration-150 ease-in text-3xl'>양식의 항목을 다 작성해주세요!</p>
           )}
           <Box component="form" noValidate sx={{ mt: 3 }}
             onSubmit={handleSubmit}
