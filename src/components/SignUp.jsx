@@ -30,17 +30,20 @@ const Signup = () => {
   // signup.jsx에 입력하는 모든 정보들이 있는 변수
   const [values, setValues] = useState({
     username: '',
-    email: '',
+    userEmail: '',
     password: '',
     password2: '',
     userNickname: ''
+    // 나중에 여기에 userId 변수를 추가해야 한다.
   })
+  //validationInfo에서 에러가 떳을 때 에러들을 담아두는 변수 - 객채임
+  const [errors, setErrors] = useState()
 
 
   const navigate = useNavigate()
 
   useEffect(() => {
-  const query = allUserId()
+    const query = allUserId()
 
     client
       .fetch(query)
@@ -56,44 +59,82 @@ const Signup = () => {
       ...values,
       [name]: value
     })
+    console.log('infos about values in the form', values);
+  }
+
+  const validationInfo = values => {
+    let errors = {}
+
+    if (!values.userId) {
+      errors.userId = '유저 아이디를 입력하세요'
+    }
+
+    if (!values.username.trim()) {
+      errors.username = "유저 이름을 입력하세요"
+    }
+
+    if (!values.userEmail) {
+      errors.userEmail = "Email을 입력하세요"
+    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+      errors.userEmail = "Email의 형식이 아닙니다"
+    }
+
+    if (!values.password) {
+      errors.password = '암호를 입력하세요'
+    } else if (values.password.length < 4) {
+      errors.password = '암호를 4자 이상 입력하세요'
+    }
+
+    if (!values.password2) {
+      errors.password2 = '암호를 입력하세요'
+    } else if (values.password2 !== values.password) {
+      errors.password2 = '암호가 일치하지 않습니다 '
+    }
+
+    if (!values.userNickname) {
+      errors.userNickname = '유저의 별명을 입력하세요'
+    }
+    return errors
   }
 
 
 
   const handleSubmit = (event) => {
-    setAddingAccountInfo(true)
-
+    
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
+    setErrors(validationInfo(values))
+    // setAddingAccountInfo(true)
 
-    const doc = {
-      _type: 'accountInfo',
-      userId : data.get('userId'),
-      password: data.get('password'),
-      userName: data.get('userName'),
-      userNickname  : data.get('userNickname'),
-      userEmail: data.get('userEmail'),
-    }
+    // const data = new FormData(event.currentTarget);
 
-    if (doc.userId && doc.password && doc.userName && doc.userNickname && doc.userEmail) {
-      if (idAlreadyExist) {
-        setTimeout(() => {
-          setIdAlreadyExist(false)
-        },2000)
-      }
-      client.create(doc)
-        .then(() => {
-          setAddingAccountInfo(false)
-          navigate('/signin')
-        })
-    } else {
-      setFields(true)
-      setAddingAccountInfo(false)
-      setTimeout(() => {
-        setFields(false)
-      },2000)
-    }
+    // const doc = {
+    //   _type: 'accountInfo',
+    //   userId : data.get('userId'),
+    //   password: data.get('password'),
+    //   userName: data.get('userName'),
+    //   userNickname  : data.get('userNickname'),
+    //   userEmail: data.get('userEmail'),
+    // }
+
+    // if (doc.userId && doc.password && doc.userName && doc.userNickname && doc.userEmail) {
+    //   if (idAlreadyExist) {
+    //     setTimeout(() => {
+    //       setIdAlreadyExist(false)
+    //     },2000)
+    //   }
+    //   client.create(doc)
+    //     .then(() => {
+    //       setAddingAccountInfo(false)
+    //       navigate('/signin')
+    //     })
+    // } else {
+    //   setFields(true)
+    //   setAddingAccountInfo(false)
+    //   setTimeout(() => {
+    //     setFields(false)
+    //   },2000)
+    // }
   };
   return (
     (addingAccountInfo ?
@@ -134,6 +175,9 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </Grid>
+              {errors?.userId && 
+                <p className=' text-red-500'>{errors?.userId}</p>
+              }
               <Grid item xs={12}>
               <TextField
                   margin="normal"
@@ -148,6 +192,9 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </Grid>
+              {errors?.password && 
+                <p className=' text-red-500'>{errors?.password}</p>
+              }
               <Grid item xs={12}>
               <TextField
                   margin="normal"
@@ -162,6 +209,9 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </Grid>
+              {errors?.password2 && 
+                <p className=' text-red-500'>{errors?.password2}</p>
+              }
               <Grid item xs={12}>
                 <TextField
                   margin="normal"
@@ -176,6 +226,9 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </Grid>
+              {errors?.username && 
+                <p className=' text-red-500'>{errors?.username}</p>
+              }
               <Grid item xs={12}>
                 <TextField
                   margin="normal"
@@ -190,6 +243,9 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </Grid>
+              {errors?.userEmail && 
+                <p className=' text-red-500'>{errors?.userEmail}</p>
+              }
               <Grid item xs={12}>
                 <TextField
                   margin="normal"
@@ -203,6 +259,9 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </Grid>
+              {errors?.userNickname && 
+                <p className=' text-red-500'>{errors?.userNickname}</p>
+              }
             </Grid>
             <Button
               type="submit"
