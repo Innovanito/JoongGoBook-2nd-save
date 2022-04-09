@@ -14,7 +14,7 @@ import { useNavigate} from 'react-router-dom'
 import logo from '../assets/logo.png'
 import Spinner from './Spinner';
 
-import { bringDefaultImage } from '../utils/data'
+import { allUserId } from '../utils/data';
 
 
 
@@ -23,24 +23,41 @@ const Signup = () => {
   const [addingAccountInfo, setAddingAccountInfo] = useState(false)
   //계정의 항목을 다 작성했는지 안 했는지 알려주는 Boolean 변수
   const [fields, setFields] = useState(false)
-  const [defaultImage, setDefaultImage] = useState('')
+  // userId가 이미 존재하고 있다고 알려주는 변수
+  const [idAlreadyExist, setIdAlreadyExist] = useState(false)
+  //userId가 중복되는 지 검사하기 위해 이미 존재하는 모든 Id를 담아둔 변수
+  const [userIds, setUserIds] = useState(null)
+  // signup.jsx에 입력하는 모든 정보들이 있는 변수
+  const [values, setValues] = useState({
+    username: '',
+    email: '',
+    password: '',
+    password2: '',
+    userNickname: ''
+  })
 
 
   const navigate = useNavigate()
 
-    useEffect(() => {
-    //sanity client에 있는 user-icon의 url을 가져오는 함수
-    const queryBringImage = bringDefaultImage()
+  useEffect(() => {
+  const query = allUserId()
 
-    if (queryBringImage) {
-      client
-        .fetch(queryBringImage)
-        .then((data) => {
-          setDefaultImage(data[0])
-          console.log('imageData', defaultImage );
-        })
-    }
+    client
+      .fetch(query)
+      .then((data) => {
+        setUserIds(data)
+        console.log('infos about all userIds', userIds);
+      })
   }, [])
+
+  const handleChange = e => {
+    const { name, value} = e.target
+    setValues({
+      ...values,
+      [name]: value
+    })
+  }
+
 
 
   const handleSubmit = (event) => {
@@ -53,13 +70,18 @@ const Signup = () => {
     const doc = {
       _type: 'accountInfo',
       userId : data.get('userId'),
-      password : data.get('password'),
+      password: data.get('password'),
+      userName: data.get('userName'),
       userNickname  : data.get('userNickname'),
       userEmail: data.get('userEmail'),
-      image: defaultImage
     }
 
-    if (doc.userId && doc.password && doc.userNickname && doc.userEmail) {
+    if (doc.userId && doc.password && doc.userName && doc.userNickname && doc.userEmail) {
+      if (idAlreadyExist) {
+        setTimeout(() => {
+          setIdAlreadyExist(false)
+        },2000)
+      }
       client.create(doc)
         .then(() => {
           setAddingAccountInfo(false)
@@ -92,7 +114,7 @@ const Signup = () => {
             회원가입
           </Typography>
           {fields && (
-            <p className='text-red-500 mb-5 text-center transition-all duration-150 ease-in text-3xl'>양식의 항목을 다 작성해주세요!</p>
+            <p className='text-red-500 mb-5 text-center transition-all duration-150 ease-in text-2xl'>양식의 항목을 다 작성해주세요!</p>
           )}
           <Box component="form" noValidate sx={{ mt: 3 }}
             onSubmit={handleSubmit}
@@ -100,7 +122,7 @@ const Signup = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  autoComplete="username"
+                  autoComplete="userId"
                   name="userId"
                   required
                   fullWidth
@@ -108,6 +130,8 @@ const Signup = () => {
                   type='userId'
                   label="아이디"
                   autoFocus
+                  value={values.userId}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -119,7 +143,23 @@ const Signup = () => {
                   label="비밀번호"
                   type="password"
                   id="password"
-                  autoComplete="username"
+                  autoComplete="password"
+                  value={values.password}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+              <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password2"
+                  label="비밀번호"
+                  type="password"
+                  id="password2"
+                  autoComplete="password2"
+                  value={values.password2}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -127,11 +167,13 @@ const Signup = () => {
                   margin="normal"
                   required
                   fullWidth
-                  id="userName"
+                  id="username"
                   label="이름"
-                  name="userName"
-                  autoComplete="userName"
+                  name="username"
+                  autoComplete="username"
                   autoFocus
+                  value={values.username}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -144,6 +186,8 @@ const Signup = () => {
                   name="userEmail"
                   autoComplete="userEmail"
                   autoFocus
+                  value={values.userEmail}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -155,6 +199,8 @@ const Signup = () => {
                   label="이 사이트 별명"
                   name="userNickname"
                   autoFocus
+                  value={values.userNickname}
+                  onChange={handleChange}
                 />
               </Grid>
             </Grid>

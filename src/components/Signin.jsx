@@ -58,17 +58,16 @@ const Signin = () => {
     setIsLoading(true)
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-   
+
     const userId = data.get('userId')
     const password = data.get('password')
 
     const query = accountIdAndPw(userId)
 
-
     if (query) {
       client.fetch(query)
         .then((data) => {
-          if (data[0]?.password) {
+          if (data[0]?.password == password) {
             const doc = {
               _id: userId,
               _type: 'user',

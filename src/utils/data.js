@@ -181,6 +181,13 @@ export const userSavedPinsQuery = (userId) => {
   return query
 }
 
+export const allUserId = () => {
+  const query = `*[_type == "accountInfo"]{
+    userId
+  }`
+  return query
+}
+
 
 export const accountIdAndPw = (userId) => {
   const query = `*[_type == "accountInfo" && userId == '${userId}']{

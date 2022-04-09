@@ -141,7 +141,7 @@ const UserProfile = ({user}) => {
             </button>
           </div>
           <div className="px-2">
-            <MasonryLayout pins={pins} isUserProfile={isUserProfile} />
+            <MasonryLayout pins={pins} isUserProfile={isUserProfile} text={text} />
           </div>
           {pins?.length === 0 && (
             <div className="flex justify-center font-bold items-center w-full text-xl mt-2">
