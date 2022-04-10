@@ -6,7 +6,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-// import { v4 as uuidv4 } from 'uuid'
 
 import { client } from '../client'
 import { useNavigate} from 'react-router-dom'
@@ -23,8 +22,6 @@ const Signup = () => {
   const [addingAccountInfo, setAddingAccountInfo] = useState(false)
   //계정의 항목을 다 작성했는지 안 했는지 알려주는 Boolean 변수
   const [fields, setFields] = useState(false)
-  // userId가 이미 존재하고 있다고 알려주는 변수
-  const [idAlreadyExist, setIdAlreadyExist] = useState(false)
   //userId가 중복되는 지 검사하기 위해 이미 존재하는 모든 Id를 담아둔 변수
   const [userIds, setUserIds] = useState(null)
   // signup.jsx에 입력하는 모든 정보들이 있는 변수
@@ -57,11 +54,6 @@ const Signup = () => {
       .fetch(query)
       .then((data) => {
         setUserIds(data)
-        console.log('infos about all userIds', userIds);
-        userIds.map((userId) => {
-        console.log('map in userId' , userId);
-        // if (userId == values.userId) errors.userId = '유저 아이디가 존재합니다'
-      })
       })
   }, [])
 
@@ -71,7 +63,6 @@ const Signup = () => {
       ...values,
       [name]: value
     })
-    console.log('infos about values in the form', values);
   }
 
   const validationInfo = values => {
@@ -81,7 +72,7 @@ const Signup = () => {
       errors.userId = '유저 아이디를 입력하세요'
     } else if (
       userIds.map((item) => {
-        if (item.userId == values.userId) errors.userId = '유저 아이디가 존재합니다'
+        if (item.userId === values.userId) errors.userId = '유저 아이디가 존재합니다'
       })
     )
 
@@ -92,20 +83,19 @@ const Signup = () => {
     if (!values.userEmail) {
       errors.userEmail = "Email을 입력하세요"
     }
-    // else if (!/\W+@\W+\.\W+/.test(values.email)) {
+    // else if (!/\W+@\W+\.\W+/.test(values.userEmail)) {
     //   errors.userEmail = "Email의 형식이 아닙니다"
     // }
-    else if (/\W+@\W+\.\W+/.test(values.userEmail)) {
-      errors.userEmail = "Email의 형식이 맞습니다"
-    }
-    else  {
-      errors.userEmail = "Email의 형식이 아닙니다"
-    }
+
 
     if (!values.password) {
       errors.password = '암호를 입력하세요'
-    } else if (values.password.length < 4) {
+    }
+    else if (values.password.length < 4) {
       errors.password = '암호를 4자 이상 입력하세요'
+    }
+    else if (values.password.length > 16) {
+      errors.password = '암호를 16자 이하 입력하세요'
     }
 
     if (!values.password2) {
@@ -123,43 +113,28 @@ const Signup = () => {
 
 
   const handleSubmit = (event) => {
-    
     event.preventDefault();
 
     setErrors(validationInfo(values))
-    console.log('infos about form', values);
-    console.log('infos about errors',validationInfo(values) );
-    // setAddingAccountInfo(true)
 
-    // const data = new FormData(event.currentTarget);
-
-    // const doc = {
-    //   _type: 'accountInfo',
-    //   userId : data.get('userId'),
-    //   password: data.get('password'),
-    //   userName: data.get('userName'),
-    //   userNickname  : data.get('userNickname'),
-    //   userEmail: data.get('userEmail'),
-    // }
-
-    // if (doc.userId && doc.password && doc.userName && doc.userNickname && doc.userEmail) {
-    //   if (idAlreadyExist) {
-    //     setTimeout(() => {
-    //       setIdAlreadyExist(false)
-    //     },2000)
-    //   }
-    //   client.create(doc)
+    if (Object.keys(errors).length) {
+      console.log('infos about form' ,values);
+      console.log('erros', errors);
+      console.log('infos about errors exist');
+      setFields(true)
+      setTimeout(() => {
+        setFields(false)
+      },2000)
+    } else {
+      console.log('infos about form' ,values);
+      console.log('infos about errors do not exist');
+      // setAddingAccountInfo(true)
+    //   client.create(values)
     //     .then(() => {
     //       setAddingAccountInfo(false)
     //       navigate('/signin')
     //     })
-    // } else {
-    //   setFields(true)
-    //   setAddingAccountInfo(false)
-    //   setTimeout(() => {
-    //     setFields(false)
-    //   },2000)
-    // }
+    }
   };
   return (
     (addingAccountInfo ?
@@ -180,9 +155,12 @@ const Signup = () => {
             회원가입
           </Typography>
           {fields && (
-            <p className='text-red-500 mb-5 text-center transition-all duration-150 ease-in text-2xl'>양식의 항목을 다 작성해주세요!</p>
+            <p className='text-red-500 mb-5 text-center transition-all duration-150 ease-in text-2xl'>양식의 항목을 바르게 작성하세요</p>
           )}
-          <Box component="form" noValidate sx={{ mt: 3 }}
+          <Box
+            component="form"
+            noValidate
+            sx={{ mt: 3 }}
             onSubmit={handleSubmit}
           >
             <Grid container spacing={2}>
@@ -209,7 +187,7 @@ const Signup = () => {
                   required
                   fullWidth
                   name="password"
-                  label="비밀번호"
+                  label="비밀번호(4자 이상 16자 이하 입력해주세요)"
                   type="password"
                   id="password"
                   autoComplete="password"
@@ -296,6 +274,7 @@ const Signup = () => {
             >
               회원가입하기
             </Button>
+          </Box>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/signin" variant="body2">
@@ -303,7 +282,6 @@ const Signup = () => {
                 </Link>
               </Grid>
             </Grid>
-          </Box>
         </Box>
       </Container>)
     )
