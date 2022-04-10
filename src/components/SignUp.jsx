@@ -31,13 +31,21 @@ const Signup = () => {
   const [values, setValues] = useState({
     username: '',
     userEmail: '',
+    userId:'',
     password: '',
     password2: '',
     userNickname: ''
     // 나중에 여기에 userId 변수를 추가해야 한다.
   })
   //validationInfo에서 에러가 떳을 때 에러들을 담아두는 변수 - 객채임
-  const [errors, setErrors] = useState()
+  const [errors, setErrors] = useState({
+    username: '',
+    userEmail: '',
+    userId:'',
+    password: '',
+    password2: '',
+    userNickname: ''
+  })
 
 
   const navigate = useNavigate()
@@ -50,6 +58,10 @@ const Signup = () => {
       .then((data) => {
         setUserIds(data)
         console.log('infos about all userIds', userIds);
+        userIds.map((userId) => {
+        console.log('map in userId' , userId);
+        // if (userId == values.userId) errors.userId = '유저 아이디가 존재합니다'
+      })
       })
   }, [])
 
@@ -67,7 +79,11 @@ const Signup = () => {
 
     if (!values.userId) {
       errors.userId = '유저 아이디를 입력하세요'
-    }
+    } else if (
+      userIds.map((item) => {
+        if (item.userId == values.userId) errors.userId = '유저 아이디가 존재합니다'
+      })
+    )
 
     if (!values.username.trim()) {
       errors.username = "유저 이름을 입력하세요"
@@ -75,7 +91,14 @@ const Signup = () => {
 
     if (!values.userEmail) {
       errors.userEmail = "Email을 입력하세요"
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+    }
+    // else if (!/\W+@\W+\.\W+/.test(values.email)) {
+    //   errors.userEmail = "Email의 형식이 아닙니다"
+    // }
+    else if (/\W+@\W+\.\W+/.test(values.userEmail)) {
+      errors.userEmail = "Email의 형식이 맞습니다"
+    }
+    else  {
       errors.userEmail = "Email의 형식이 아닙니다"
     }
 
@@ -104,6 +127,8 @@ const Signup = () => {
     event.preventDefault();
 
     setErrors(validationInfo(values))
+    console.log('infos about form', values);
+    console.log('infos about errors',validationInfo(values) );
     // setAddingAccountInfo(true)
 
     // const data = new FormData(event.currentTarget);
