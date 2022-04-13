@@ -26,7 +26,7 @@ const Signup = () => {
   const [userIds, setUserIds] = useState(null)
   // signup.jsx에 입력하는 모든 정보들이 있는 변수
   const [values, setValues] = useState({
-    username: '',
+    userName: '',
     userEmail: '',
     userId:'',
     password: '',
@@ -36,7 +36,7 @@ const Signup = () => {
   })
   //validationInfo에서 에러가 떳을 때 에러들을 담아두는 변수 - 객채임
   const [errors, setErrors] = useState({
-    username: '',
+    userName: '',
     userEmail: '',
     userId:'',
     password: '',
@@ -57,6 +57,7 @@ const Signup = () => {
       })
   }, [])
 
+  //회원 가입 form의 정보가 바꿨을 때 동작하는 함수
   const handleChange = e => {
     const { name, value} = e.target
     setValues({
@@ -65,27 +66,33 @@ const Signup = () => {
     })
   }
 
+  //회원 가입 form의 정보를 양식에 맞게 확인해 주는 함수
   const validationInfo = values => {
+    console.log('values in validationInfo function', values);
     let errors = {}
 
+    console.log('Initial erros values in validationInfo', errors);
     if (!values.userId) {
       errors.userId = '유저 아이디를 입력하세요'
-    } else if (
+    } else if (!/^[a-zA-Z0-9]+$/.test(values.userId)) {
+      errors.userId = '아이디를 영문 대소문자 및 숫자를 이용해서 작성하세요'
+    } else {
+      //이미 존재하는 아이디를 검사해주는 부분
       userIds.map((item) => {
         if (item.userId === values.userId) errors.userId = '유저 아이디가 존재합니다'
       })
-    )
-
-    if (!values.username.trim()) {
-      errors.username = "유저 이름을 입력하세요"
+    }
+      
+    if (!values.userName.trim()) {
+      errors.userName = "유저 이름을 입력하세요"
     }
 
     if (!values.userEmail) {
       errors.userEmail = "Email을 입력하세요"
     }
-    // else if (!/\W+@\W+\.\W+/.test(values.userEmail)) {
-    //   errors.userEmail = "Email의 형식이 아닙니다"
-    // }
+    else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(values?.userEmail)) {
+      errors.userEmail = "Email의 형식이 올바르지 않습니다."
+    }
 
 
     if (!values.password) {
@@ -107,33 +114,36 @@ const Signup = () => {
     if (!values.userNickname) {
       errors.userNickname = '유저의 별명을 입력하세요'
     }
-    return errors
+    console.log('Last errors in validationInfo', errors);
+
+    setErrors(errors)
+
+    return errors;
   }
 
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log('values in handleSubmit', values)
 
-    setErrors(validationInfo(values))
+    validationInfo(values)
 
-    if (Object.keys(errors).length) {
-      console.log('infos about form' ,values);
-      console.log('erros', errors);
-      console.log('infos about errors exist');
+    //여기에서 validationInfo(values)의 값과 errors의 값이 다르다
+    //validationInfo(values)는 즉각적으로 errors 를 반환하지만
+    //errors의 값은 변화한 값 전의 값의 errors를 반환함!
+    if (Object.keys(validationInfo(values)).length) {
       setFields(true)
       setTimeout(() => {
         setFields(false)
       },2000)
     } else {
-      console.log('infos about form' ,values);
-      console.log('infos about errors do not exist');
-      // setAddingAccountInfo(true)
-    //   client.create(values)
-    //     .then(() => {
-    //       setAddingAccountInfo(false)
-    //       navigate('/signin')
-    //     })
+      setAddingAccountInfo(true)
+      client.create(values)
+        .then(() => {
+          setAddingAccountInfo(false)
+          navigate('/signin')
+        })
     }
   };
   return (
@@ -204,7 +214,7 @@ const Signup = () => {
                   required
                   fullWidth
                   name="password2"
-                  label="비밀번호"
+                  label="비밀번호 재입력"
                   type="password"
                   id="password2"
                   autoComplete="password2"
@@ -220,17 +230,17 @@ const Signup = () => {
                   margin="normal"
                   required
                   fullWidth
-                  id="username"
+                  id="userName"
                   label="이름"
-                  name="username"
-                  autoComplete="username"
+                  name="userName"
+                  autoComplete="userName"
                   autoFocus
-                  value={values.username}
+                  value={values.userName}
                   onChange={handleChange}
                 />
               </Grid>
-              {errors?.username && 
-                <p className=' text-red-500'>{errors?.username}</p>
+              {errors?.userName && 
+                <p className=' text-red-500'>{errors?.userName}</p>
               }
               <Grid item xs={12}>
                 <TextField

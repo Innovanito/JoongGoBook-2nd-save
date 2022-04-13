@@ -95,7 +95,14 @@ const PinDetail = ({user}) => {
         {isGoogleAccount && <img className='w-8 h-8 rounded-full object-cover' src={pinDetail.postedBy?.image} alt="user-profile" />}
         <p className='font-semibold p-2'> <span className=' font-extrabold text-gray-500'>게시자:</span> {pinDetail.postedBy?.userName}</p>
       </h1>
-      <h2 className='mt-5 text-2xl'>댓글들</h2>
+      <button
+        // to={`message/uuid()로 매시지방 정해주기 }
+        className=' h-10 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3'
+        
+      >
+        판매자와 대화하기
+      </button>
+      <h2 className='mt-3 text-2xl'>댓글들</h2>
       <div className="max-h-370 overflow-y-auto">
         {pinDetail?.comments?.map((comment, i) => (
           <div className="flex gap-2 mt-5 items-center bg-white rounded-lg" key={i} >
@@ -124,14 +131,14 @@ const PinDetail = ({user}) => {
             </Link>
             <input
               type="text"
-              className='flex-1 border-gray-100 outline-none border-2 p-2 rounded-2xl focus:border-gray-300'
+              className='flex-1 border-gray-100 outline-none border-2 mr-3 p-2 rounded-2xl focus:border-gray-300'
               placeholder='댓글을 달아주세요'
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
             <button
               type='button'
-              className='bg-red-500 text-white rounded-full px-6 py-2 font-semibold text-base outline-none'
+              className='flex bg-red-500 text-white rounded-full px-6 py-2 font-semibold text-base outline-none'
               onClick={addComment}
             >
               {addingComment ? '게시물에 댓글 게시 중...' : '댓글 게시하기'}
