@@ -32,7 +32,6 @@ const Signup = () => {
     password: '',
     password2: '',
     userNickname: ''
-    // 나중에 여기에 userId 변수를 추가해야 한다.
   })
   //validationInfo에서 에러가 떳을 때 에러들을 담아두는 변수 - 객채임
   const [errors, setErrors] = useState({
@@ -42,6 +41,14 @@ const Signup = () => {
     password: '',
     password2: '',
     userNickname: ''
+  })
+  const [doc, setDoc] = useState({
+    _type:'',
+    userId: '',
+    password:'',
+    userNickname:'' ,
+    userEmail:'',
+    userName:''
   })
 
 
@@ -94,7 +101,6 @@ const Signup = () => {
       errors.userEmail = "Email의 형식이 올바르지 않습니다."
     }
 
-
     if (!values.password) {
       errors.password = '암호를 입력하세요'
     }
@@ -121,6 +127,18 @@ const Signup = () => {
     return errors;
   }
 
+  //values의 값을 doc의 형태로 넣어주는 함
+  const makeDoc = () => {
+    setDoc({
+      _type: 'accountInfo',
+      userId:values.userId,
+      password:values.password,
+      userNickname:values.userNickname,
+      userEmail:values.userEmail,
+      userName:values.userName
+    })
+    return doc
+   }
 
 
   const handleSubmit = (event) => {
@@ -139,7 +157,10 @@ const Signup = () => {
       },2000)
     } else {
       setAddingAccountInfo(true)
-      client.create(values)
+      makeDoc()
+      console.log(doc);
+      console.log(makeDoc());
+      client.create(doc)
         .then(() => {
           setAddingAccountInfo(false)
           navigate('/signin')
