@@ -10,6 +10,7 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
   const [univValue, setUnivValue] = useState('')
 
   const navigate = useNavigate()
+  
 
   useEffect(() => {
     if (univValue) {
@@ -17,15 +18,21 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
     }
     console.log(univValue);
   }, [univValue])
-  
+
   return (
     <div className='flex flex-col bg-white'>
-      <div className='flex flex-col h-80 items-end justify-end pr-5 text-gray-400'>
+      <div className='flex flex-col h-80 items-end justify-end pr-5 mt-5 text-gray-400'>
         <h2>
           중고북은 대학 내 중고 서적 거래를 중개 사이트입니다 <br/>
         </h2>
-        <h2>
+        <h2 className='mt-1'>
           판매 및 구매 시 직거래를 권장합니다
+        </h2>
+        <h2 className='mt-3'>
+          {user
+            ? null
+            : '서비스 이용을 위해 로그인을 해주세요'
+          }
         </h2>
       </div>
       <div className="flex flex-col">

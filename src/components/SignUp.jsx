@@ -64,6 +64,19 @@ const Signup = () => {
       })
   }, [])
 
+  //values의 값을 doc의 형태로 넣어주는 함
+  useEffect(() => {
+    setDoc({
+      _type: 'accountInfo',
+      userId:values.userId,
+      password:values.password,
+      userNickname:values.userNickname,
+      userEmail:values.userEmail,
+      userName:values.userName
+    })
+  }, [values])
+  
+
   //회원 가입 form의 정보가 바꿨을 때 동작하는 함수
   const handleChange = e => {
     const { name, value} = e.target
@@ -73,12 +86,10 @@ const Signup = () => {
     })
   }
 
-  //회원 가입 form의 정보를 양식에 맞게 확인해 주는 함수
+  //회원 가입 form의 정보를 양식에 맞는지 확인해 주는 함수
   const validationInfo = values => {
-    console.log('values in validationInfo function', values);
     let errors = {}
 
-    console.log('Initial erros values in validationInfo', errors);
     if (!values.userId) {
       errors.userId = '유저 아이디를 입력하세요'
     } else if (!/^[a-zA-Z0-9]+$/.test(values.userId)) {
@@ -120,30 +131,14 @@ const Signup = () => {
     if (!values.userNickname) {
       errors.userNickname = '유저의 별명을 입력하세요'
     }
-    console.log('Last errors in validationInfo', errors);
 
     setErrors(errors)
 
     return errors;
   }
 
-  //values의 값을 doc의 형태로 넣어주는 함
-  const makeDoc = () => {
-    setDoc({
-      _type: 'accountInfo',
-      userId:values.userId,
-      password:values.password,
-      userNickname:values.userNickname,
-      userEmail:values.userEmail,
-      userName:values.userName
-    })
-    return doc
-   }
-
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('values in handleSubmit', values)
 
     validationInfo(values)
 
@@ -156,10 +151,10 @@ const Signup = () => {
         setFields(false)
       },2000)
     } else {
-      setAddingAccountInfo(true)
-      makeDoc()
-      console.log(doc);
-      console.log(makeDoc());
+      // setAddingAccountInfo(true)
+      console.log('data of values', values);
+      console.log('회원가입이 완료되었습니다.')
+      console.log('doc info',doc);
       client.create(doc)
         .then(() => {
           setAddingAccountInfo(false)
