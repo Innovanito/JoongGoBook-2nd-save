@@ -31,8 +31,6 @@ const Signin = () => {
   const [idNotExist, setIdNotExist] = useState(false) //아직 안씀
   const [isLoading, setIsLoading] = useState(false)// 이 변수는 썼는데 아직 Spinner.jsx를 안 씀
   const [isPwWrong, setIsPwWrong] = useState(false)//아직 안씀
-    //Google으로 로그인을 했는지 아니면 MyWeb으로 로그인을 했는지 - 값의 형태는 Boolean
-  // const [isMyAccount, setIsMyAccount] = useState(null)
 
   const responseGoogle = (response) => {
     localStorage.setItem('user', JSON.stringify(response.profileObj))

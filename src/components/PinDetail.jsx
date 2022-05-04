@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Link, useParams, NavLink} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 
 import { client,urlFor} from '../client'
@@ -16,7 +16,6 @@ const PinDetail = ({user}) => {
   const [addingComment, setAddingComment] = useState(false)
   const { pinId } = useParams()
   const [isGoogleAccount, setIsGoogleAccount] = useState(pinDetail?.postedBy?._id)
-  const [postUserName, setPostUserName] = useState(null)
 
   
   const fetchPinDetails = () => {
@@ -55,7 +54,7 @@ const PinDetail = ({user}) => {
   }
 
   useEffect(() => {
-    fetchPinDetails()
+    fetchPinDetails() 
   }, [pinId])
 
   console.log('info of pindetail', pinDetail);
@@ -96,9 +95,8 @@ const PinDetail = ({user}) => {
         <p className='font-semibold p-2'> <span className=' font-extrabold text-gray-500'>게시자:</span> {pinDetail.postedBy?.userName}</p>
       </h1>
       <button
-        // to={`message/uuid()로 매시지방 정해주기 }
-        className=' h-10 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3'
-        
+        to={`pin-talk/`}
+        className=' h-10 w-50 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3'
       >
         판매자와 대화하기
       </button>
