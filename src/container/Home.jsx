@@ -3,7 +3,7 @@ import {HiMenu} from 'react-icons/hi'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import {Link, Route, Routes} from 'react-router-dom'
 
-import {Sidebar, UserProfile, Footer, Navbar, Signin} from '../components'
+import {Sidebar, UserProfile, Footer, Navbar, Signin, DM} from '../components'
 import Pins from './Pins'
 
 import { userQuery, userQueryForMyAccount } from '../utils/data'
@@ -95,6 +95,7 @@ const Home = () => {
           <Routes>
             <Route path='/user-profile/:userId' element={<UserProfile user={user && user} />} />
             <Route path='/*' element={<Pins user={user && user} />} />
+            <Route path='DM' element={<DM  />} />
           </Routes>
         </div>
       </div>

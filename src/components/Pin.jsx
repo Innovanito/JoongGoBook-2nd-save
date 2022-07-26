@@ -57,7 +57,6 @@ const Pin = ({ pin, isUserProfile, text }) => {
     // isSold가 true인 pin은 userProfile 안에 있는 pin 항목에서 제거시켜준다
     // isSold가 true인 pin은 home에 있는 feed.js에서 하얀색으로 바꾸던지 아니면 아예 제거시켜주기
   }
-  console.log('info of isUerprofile', isUserProfile);
 
   return (
       <div className='m-2'>

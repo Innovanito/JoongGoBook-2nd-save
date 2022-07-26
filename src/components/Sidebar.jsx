@@ -28,9 +28,6 @@ const Sidebar = ({ user, closeToggle }) => {
   //   }
   // }, [user])
   
-
-  // console.log('In Sidebar User Info', user);
-
   return (
     <div className="flex flex-col justify-between bg-white h-full overflow-y-scroll min-w-210 hide-scrollbar shadow-xl border-x-2">
       <div className="flex flex-col ">
@@ -84,6 +81,17 @@ const Sidebar = ({ user, closeToggle }) => {
                 onClick={handleCloseSidebar}
               >
                 {categories[2].name}
+              </NavLink>
+            }
+          </div>
+          <div>
+            {user && 
+              <NavLink
+                to={'/DM'}
+                className={isActiveStyle}
+                onClick={handleCloseSidebar}
+              >
+                {categories[3].name}
               </NavLink>
             }
           </div>

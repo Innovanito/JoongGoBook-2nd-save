@@ -41,7 +41,6 @@ const CreatePin = ({user}) => {
         .upload('image', e.target.files[0], { contentType: type, filename: name})
         .then((document) => {
           setImageAsset(document)
-          console.log('image info', document);
           setLoading(false)
         })
         .catch((error) => {
@@ -136,7 +135,7 @@ const CreatePin = ({user}) => {
                   </p>
                 </div>
                 <input
-                  type="file"
+                  type="file" 
                   name='upload-image'
                   onChange={uploadImage}
                   className='w-0 h-0 '
@@ -161,7 +160,7 @@ const CreatePin = ({user}) => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder='제목을 입력하세요'
+            placeholder='제목을 입력하세요(책이름-저자-출판사)'
             className='outline-none text-2xl sm:text-3xl font-bold border-b-2 border-gray-200 p-2'
           />
           {user && (
@@ -186,7 +185,7 @@ const CreatePin = ({user}) => {
           />
           <div className="flex justify-between bg-gray-50 rounded-lg p-1">
             <div className="flex items-center">
-              다니는 대학교를 선택해주세요
+              재학중인 대학교를 선택해주세요
             </div>
             <div className="flex mr-5 p-2 items-center">
               <select  name="univ-list" value={univValue} onChange={e => setUnivValue(e.target.value)}>

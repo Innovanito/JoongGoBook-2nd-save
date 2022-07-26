@@ -94,12 +94,15 @@ const PinDetail = ({user}) => {
         {isGoogleAccount && <img className='w-8 h-8 rounded-full object-cover' src={pinDetail.postedBy?.image} alt="user-profile" />}
         <p className='font-semibold p-2'> <span className=' font-extrabold text-gray-500'>게시자:</span> {pinDetail.postedBy?.userName}</p>
       </h1>
-      <button
-        to={`pin-talk/`}
-        className=' h-10 w-50 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3'
-      >
-        판매자와 대화하기
-      </button>
+      {user._id === pinDetail?.postedBy._id ?
+        null :
+        <Link
+          to={'/DM'}
+          className=' h-10 w-50 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3 text-center'
+        >
+          판매자와 대화하기
+        </Link>
+      }
       <h2 className='mt-3 text-2xl'>댓글들</h2>
       <div className="max-h-370 overflow-y-auto">
         {pinDetail?.comments?.map((comment, i) => (

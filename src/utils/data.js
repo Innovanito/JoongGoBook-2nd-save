@@ -3,8 +3,8 @@ export const categories = [
   {name: '중고 교재 살펴보기'},
   { name: '중고 교재 올리기' },
   { name: '나의 활동기록 보기' },
+  { name: '중고거래 채팅'}
   // {name: '중고 교재 무료나눔'},
-  // {name: '중고 장비'},
   // {name: '신고하기'},
 ]
 
