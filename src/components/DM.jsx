@@ -4,6 +4,10 @@ import { useParams } from 'react-router-dom'
 import { client } from '../client'
 import { pinDetailQuery } from '../utils/data'
 
+import MessageHeader from './MessageHeader'
+import MessageWindow from './MessageWindow'
+import MessageFooter from './MessageFooter'
+
 const DM = () => {
   const [pinDetail, setPinDetail] = useState(null)
   const { pinId } = useParams()
@@ -23,7 +27,11 @@ const DM = () => {
     fetchPinDetails() 
   }, [pinId])
   return (
-    <h1>dm</h1>
+    <div>
+      <MessageHeader />
+      <MessageWindow />
+      <MessageFooter />
+    </div>
   )
 }
 

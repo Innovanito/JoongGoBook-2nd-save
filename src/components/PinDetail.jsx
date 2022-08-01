@@ -53,11 +53,37 @@ const PinDetail = ({user}) => {
     }
   }
 
+  const fetchMessageId = () => {
+
+  }
+
+    const createMeesage = () => {
+    if (comment) {
+      setAddingComment(true)
+
+      client
+        .patch(pinId)
+        .setIfMissing({ comments: []})
+        .insert('after', 'comments[-1]', [{
+          comment,
+          _key: uuidv4(),
+          postedBy: {
+            _type: 'postedBy',
+            _ref: user._id
+          }
+        }])
+        .commit()
+        .then(() => {
+          fetchPinDetails()
+          setComment('')
+          setAddingComment(false)
+        })
+    }
+  }
+
   useEffect(() => {
     fetchPinDetails() 
   }, [pinId])
-
-  console.log('info of pindetail', pinDetail);
 
 
   if(!pinDetail) return <Spinner message='상품을 불러오고있습니다' />
@@ -94,14 +120,20 @@ const PinDetail = ({user}) => {
         {isGoogleAccount && <img className='w-8 h-8 rounded-full object-cover' src={pinDetail.postedBy?.image} alt="user-profile" />}
         <p className='font-semibold p-2'> <span className=' font-extrabold text-gray-500'>게시자:</span> {pinDetail.postedBy?.userName}</p>
       </h1>
-      {user._id === pinDetail?.postedBy._id ?
-        null :
-        <Link
-          to={'/DM'}
-          className=' h-10 w-50 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3 text-center'
-        >
-          판매자와 대화하기
-        </Link>
+      {
+        user?._id ?
+        (user?._id === pinDetail?.postedBy._id ?
+          null :
+          <Link
+            to={'/DM'}
+            className=' h-10 w-50 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3 text-center'
+          >
+            판매자와 대화하기
+          </Link>
+        ) :
+        <h3 className=' font-bold text-xl text-gray-400 mt-3 mb-3'>
+          판매자와 대화를 위해 로그인을 해주세요
+        </h3>
       }
       <h2 className='mt-3 text-2xl'>댓글들</h2>
       <div className="max-h-370 overflow-y-auto">
