@@ -34,6 +34,9 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
             : '서비스 이용을 위해 로그인을 해주세요'
           }
         </h2>
+        <h5 className='mt-1 text-xs'>
+          창이 띄지 않을 경우 새로고침을 해주세요
+        </h5>
       </div>
       <div className="flex flex-col">
         <div className="flex items-center w-full mt-5 pb-2">
