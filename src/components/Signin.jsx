@@ -92,10 +92,14 @@ const Signin = () => {
             flexDirection: 'column',
             alignItems: 'center',
           }}
-      >
-        <div className="flex justify-center items-center m-2 w-40">
-          <img src={logo} alt="web-logo" />
-        </div>
+      > 
+        <Link
+          href='/'
+        >
+          <div className="flex justify-center items-center m-2 w-40">
+            <img src={logo} alt="web-logo" />
+          </div>
+        </Link>
         <Typography component="h1" variant="h5">
           회원가입
         </Typography>
