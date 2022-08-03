@@ -76,7 +76,7 @@ const UserProfile = ({user}) => {
     return <Spinner message='페이지 로딩중...' />
   }
 
-  console.log('info of isUserProfile in UserProfile.jsx ', isUserProfile);
+  // console.log('info of isUserProfile in UserProfile.jsx ', isUserProfile);
 
   return (
     <div className='relative pb-2 h-full justify-center items-center'>
