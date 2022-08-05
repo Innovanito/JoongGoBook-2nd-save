@@ -1,4 +1,6 @@
 import React from 'react'
+import userIcon  from '../assets/user-icon.png'
+import threeDots from '../assets/three_dots.png' 
 
 const MessageWindow = () => {
   return (
@@ -27,11 +29,33 @@ const MessageWindow = () => {
                   </a>
                 </div>
               </div>
+              
             </div>
           </div>
         </div>
+          <div className="flex-1 p:2 sm:pb-6 justify-between flex flex-col h-screen xl:flex">
+            <div className="flex sm:items-center justify-between py-3 border-b border-gray-200 p-3">
+              <div className="flex items-center space-x-4">
+                <img
+                  src={userIcon}
+                  alt="user-icon"
+                  className=' w-10 sm:w-12 h-10 sm:h-12 rounded-full cursor-pointer'
+                />
+                <div className="flex flex-col leading-tight">
+                  <div className="text-xl mt-1 flex items-center ">
+                    <span className=" text-gray-700 mr-3">User Name</span>
+                  </div>
+                </div>
+              </div>
+            
+            <div className="flex  items-center space-x-2">
+              <button className=' inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'>
+                <img src={threeDots} alt="three-dots" />
+              </button>
+            </div>
+            </div>
+          </div>
       </div>
-
     </div>
   )
 }
