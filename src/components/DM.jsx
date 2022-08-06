@@ -6,7 +6,6 @@ import { pinDetailQuery } from '../utils/data'
 
 import MessageHeader from './MessageHeader'
 import MessageWindow from './MessageWindow'
-import MessageFooter from './MessageFooter'
 
 const DM = () => {
   const [pinDetail, setPinDetail] = useState(null)
@@ -31,7 +30,6 @@ const DM = () => {
     <div>
       <MessageHeader />
       <MessageWindow />
-      <MessageFooter />
     </div>
   )
 }
