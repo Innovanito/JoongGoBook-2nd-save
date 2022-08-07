@@ -17,7 +17,6 @@ const DM = () => {
     if (query) {
       client.fetch(query)
         .then((data) => {
-          console.log('data info', data[0]);
           setPinDetail(data[0])
         })
     }

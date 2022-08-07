@@ -2,12 +2,12 @@ import React from 'react'
 import userIcon  from '../assets/user-icon.png'
 import threeDots from '../assets/three_dots.png' 
 import plus from '../assets/plus.jpg'
-import manWithBook from '../assets/man_book.jpg'
+import Chat from './Chat.jsx'
 
 
 const MessageWindow = () => {
   return (
-    <div className="flex-1 min-w-0 bg-white xl:flex mt-3 relative">
+    <div className="flex-1 min-w-0 bg-white xl:flex relative ">
       <div className="border-b border-gray-200 xl:border-b-0 xl:flex-shrink-0 xl:w-64 xl:border-gray-200 bg-gray-50">
         <div className="h-full pl-4 pr-2 py-6 sm:pl-6 lg:pl-8 xl:pl-0">
           <div className="h-full relative">
@@ -21,12 +21,12 @@ const MessageWindow = () => {
               </div>
               <div className="flex-1 min-w-0">
                 <a href="#" className="focus:outline-none">
-                  <span className="absolute inset-0"></span>
-                  <p className="text-sm font-bold text-red-400">
+                  <p className=' pl-3 font-bold text-gray-900 text-lg text-center'> 상품 이름</p>
+                  <p className="text-sm font-bold text-red-400 text-center">
                     판매중
                   </p>
-                  <p className="text-sm text-gray-500 truncate">
-                    가격
+                  <p className="text-sm text-gray-500 truncate text-center">
+                    가격(원)
                   </p>
                 </a>
               </div>
@@ -34,7 +34,7 @@ const MessageWindow = () => {
           </div>
         </div>
       </div>
-      <div className="flex-1 p:2 sm:pb-6 justify-between flex flex-col h-screen xl:flex"> 
+      <div className="flex-1 p:2 sm:pb-6 justify-between flex flex-col h-screen xl:flex bg-white overflow-y-scroll"> 
         <div className="h-full">
           <div className="flex sm:items-center justify-between py-3 border-b border-gray-200 p-3">
             <div className="flex items-center space-x-4">
@@ -45,7 +45,7 @@ const MessageWindow = () => {
               />
               <div className="flex flex-col leading-tight">
                 <div className="text-xl mt-1 flex items-center ">
-                  <span className=" text-gray-700 mr-3">상대방 이름</span>
+                  <span className=" text-gray-700 mr-3">상대방 이름2</span>
                 </div>
               </div>
             </div>
@@ -63,55 +63,16 @@ const MessageWindow = () => {
             className="flex flex-col space-y-4 p-3 overflow-y-auto scroll-m-2 w-full"
           >
             {/* first chat */}
-            <div className="chat-message">
-              <div className="flex items-end">
-                <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                  <div>
-                    <span className="px-4 py-2 rounded-full inline-block rounded-bl-none bg-red-200 text-gray-600 text-lg" >
-                      채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {/* second chat */}
-            <div className="chat-message">
-              <div className="flex items-end justify-end">
-                <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-end">
-                  <div>
-                    <span className="px-4 py-2 rounded-full inline-block rounded-br-none bg-green-400 text-white text-lg">
-                      채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* third chat */}
-            <div className="chat-message">
-              <div className="flex items-end">
-                <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                  <div>
-                    <span className="px-4 py-2 rounded-full inline-block rounded-bl-none bg-red-200 text-gray-600 text-lg" >
-                      채팅3입니다
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* third chat ends */}
-              
-            {/* fouth chat */}
-            <div className="chat-message">
-              <div className="flex items-end justify-end">
-                <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-end">
-                  <div>
-                    <span className="px-4 py-2 rounded-full inline-block rounded-br-none bg-green-400 text-white text-lg">
-                      채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Chat own={true} />
+            <Chat />
+            <Chat own={true} />
+            <Chat own={true} />
+            <Chat own={true} />
+            <Chat own={true} />
+            <Chat own={true} />
+            <Chat own={true} />
+            <Chat own={true} />
+            <Chat own={true} />
           </div>
           {/* message ends here */}
 
