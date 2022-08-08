@@ -11,7 +11,8 @@ const Chat = ({own}) => {
               <span className="px-4 py-2 rounded-full inline-block rounded-bl-none bg-red-200 text-gray-600 text-lg" >
                 채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1채팅1
               </span>
-            </div>
+            </div> 
+            <div className="text-gray-400">CreatedAt 00:00</div>
           </div>
         </div>
       </div> :
@@ -23,6 +24,7 @@ const Chat = ({own}) => {
                 채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2채팅2
               </span>
             </div>
+            <div className="text-gray-400">CreatedAt 00:00</div>  
           </div>
         </div>
       </div>
