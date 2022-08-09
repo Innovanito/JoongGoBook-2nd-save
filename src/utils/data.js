@@ -199,6 +199,13 @@ export const accountIdAndPw = (userId) => {
   return query;
 };
 
+export const dmData = (dmId) => {
+  const query =`*[_type == 'dm']{
+    chat
+  }`
+  return query
+}
+
 //260개 정도 목록이 있음
 export const univList = [
   '없음',

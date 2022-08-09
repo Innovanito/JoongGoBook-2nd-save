@@ -3,9 +3,43 @@ import userIcon  from '../assets/user-icon.png'
 import threeDots from '../assets/three_dots.png' 
 import plus from '../assets/plus.jpg'
 import Chat from './Chat.jsx'
+import { useState, useEffect } from 'react'
+import { dmData } from '../utils/data'
+import { client} from '../client'
+
 
 
 const MessageWindow = () => {
+  const [messages, setMessages] = useState()
+  const [newMessage, setNewMessage] = useState("")
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const message = {
+      // sender: user._id,
+      text: newMessage,
+    }
+  }
+
+  const fetchDmData = (dmId) => {
+    const query = dmData(dmId)
+      if (query) {
+        client.fetch(query)
+          .then((data) => {
+            console.log('data info', data);
+            console.log('data in the first row info', data[0]);
+          })
+      }
+  }
+
+
+  useEffect(() => {
+    const chatData = fetchDmData('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') //hard-coded but have to fix it later
+    console.log(chatData);
+  }, [])
+  
+
+
   return (
     <div className="flex-1 min-w-0 bg-white xl:flex relative ">
       <div className="border-b border-gray-200 xl:border-b-0 xl:flex-shrink-0 xl:w-64 xl:border-gray-200 bg-gray-50">
@@ -69,16 +103,13 @@ const MessageWindow = () => {
             <Chat own={true} />
             <Chat own={true} />
             <Chat own={true} />
-            <Chat own={true} />
-            <Chat own={true} />
-            <Chat own={true} />
-            <Chat own={true} />
+            <Chat message={newMessage} />
           </div>
           {/* message ends here */}
 
           {/* chatting window starts */}
-          <div className="border-t-2 border-gray-200 px-4 pt-4 mt-3 mb-3">
-            <div className="relative flex">
+          <div className="border-t-2 border-gray-200 px-4 py-4 mt-3 mb-3 flex justify-between m-2 items-center">
+            <div className="relative flex w-full">
               <span className="absolute inset-y-0 flex items-center">
                 <button
                   className="inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300"
@@ -90,11 +121,18 @@ const MessageWindow = () => {
                   />
                 </button>
               </span>
-              <input
+              <textarea
                 type="text"
                 placeholder='채팅을 시작하세요!'
                 className=' w-full focus:ring-green-300 focus:placeholder-gray-500 text-gray-600 placeholder-gray-300 pl-12 bg-gray-100 rounded-full py-3 border-gray-200'
-              />
+                onChange={(e) => setNewMessage(e.target.value)}
+                value={newMessage}
+              /> 
+            </div>
+            <div className=" bg-blue-200 w-20 h-16 ml-3 text-center justify-center rounded-lg flex items-center">
+              <button
+                onClick={handleSubmit}
+              >전송</button>
             </div>
           </div>
           {/* chatting window ends */}

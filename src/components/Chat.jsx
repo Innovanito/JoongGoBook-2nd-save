@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Chat = ({own}) => {
+const Chat = ({ own }, { message }) => {
   return (
     <>
       {own ?
