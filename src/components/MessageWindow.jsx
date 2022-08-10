@@ -23,22 +23,26 @@ const MessageWindow = () => {
 
   const fetchDmData = (dmId) => {
     const query = dmData(dmId)
-      if (query) {
+    if (query) {
+      try {
         client.fetch(query)
           .then((data) => {
-            console.log('data info', data);
             console.log('data in the first row info', data[0]);
-          })
+            setMessages(data[0])
+            }
+          )
+      } catch (err) {
+        console.log(err);
       }
+    }
   }
-
 
   useEffect(() => {
     const chatData = fetchDmData('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') //hard-coded but have to fix it later
     console.log(chatData);
   }, [])
-  
 
+  console.log('data in messages', messages);
 
   return (
     <div className="flex-1 min-w-0 bg-white xl:flex relative ">
@@ -98,12 +102,14 @@ const MessageWindow = () => {
           >
             {/* first chat */}
             <Chat own={true} />
-            <Chat />
+            <Chat messages={messages} />
             <Chat own={true} />
             <Chat own={true} />
             <Chat own={true} />
             <Chat own={true} />
-            <Chat message={newMessage} />
+            <Chat messages={messages} />
+            <h1>{messages?.chat[0].text}</h1>
+            <h1>{messages?.chat[1].text}</h1>
           </div>
           {/* message ends here */}
 
