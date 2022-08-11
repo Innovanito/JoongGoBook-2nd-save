@@ -5,20 +5,43 @@ import plus from '../assets/plus.jpg'
 import Chat from './Chat.jsx'
 import { useState, useEffect } from 'react'
 import { dmData } from '../utils/data'
-import { client} from '../client'
-
-
+import { client } from '../client'
+import { v4 as uuidv4 } from 'uuid'
+import SmallSpinner from './SmallSpinner'
 
 const MessageWindow = () => {
   const [messages, setMessages] = useState()
   const [newMessage, setNewMessage] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  let presentTime = new Date();
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const message = {
-      // sender: user._id,
-      text: newMessage,
+    setLoading(true)
+
+    if (newMessage) {
+      client
+        .patch('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') // hard-coded, so fix it later, coversationId is firstDm
+        .setIfMissing({ chat: []})
+        .insert('after', 'chat[-1]', [{
+          text :newMessage,
+          _key: uuidv4(),
+          chatTime: presentTime,
+          postedBy: {
+             // hard-coded, so fix it later, userId is zcx123
+            _type: 'postedBy',
+            _ref: 'drafts.x0zDxxmL6w5GbC0bnbb5OR', 
+            // _id: 'drafts.x0zDxxmL6w5GbC0bnbb5OR'
+          }
+        }])
+        .commit()
+        .then(() => {
+          setNewMessage("")
+          setLoading(false)
+        })
     }
+
   }
 
   const fetchDmData = (dmId) => {
@@ -27,7 +50,6 @@ const MessageWindow = () => {
       try {
         client.fetch(query)
           .then((data) => {
-            console.log('data in the first row info', data[0]);
             setMessages(data[0])
             }
           )
@@ -42,7 +64,7 @@ const MessageWindow = () => {
     console.log(chatData);
   }, [])
 
-  console.log('data in messages', messages);
+  console.log(newMessage);
 
   return (
     <div className="flex-1 min-w-0 bg-white xl:flex relative ">
@@ -108,8 +130,6 @@ const MessageWindow = () => {
             <Chat own={true} />
             <Chat own={true} />
             <Chat messages={messages} />
-            <h1>{messages?.chat[0].text}</h1>
-            <h1>{messages?.chat[1].text}</h1>
           </div>
           {/* message ends here */}
 
@@ -133,12 +153,23 @@ const MessageWindow = () => {
                 className=' w-full focus:ring-green-300 focus:placeholder-gray-500 text-gray-600 placeholder-gray-300 pl-12 bg-gray-100 rounded-full py-3 border-gray-200'
                 onChange={(e) => setNewMessage(e.target.value)}
                 value={newMessage}
-              /> 
+              />
+              {loading &&
+                <span
+                className='absolute top-4 flex items-center right-0'
+              >
+                <SmallSpinner
+                  message={'채팅 전송중...'}
+                  className='w-10 h-7'
+                />
+              </span>}
             </div>
             <div className=" bg-blue-200 w-20 h-16 ml-3 text-center justify-center rounded-lg flex items-center">
               <button
                 onClick={handleSubmit}
-              >전송</button>
+              >
+                전송
+              </button>
             </div>
           </div>
           {/* chatting window ends */}

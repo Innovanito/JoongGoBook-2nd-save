@@ -1,10 +1,11 @@
 import React from 'react'
 
 
-const Chat = ({ own , messages}  ) => {
 
-  console.log('props value in Chat component',messages);
-  console.log('1st text in the chat',messages?.chat[0].text);
+const Chat = ({ own, messages }) => {
+  
+  let today = new Date();
+  let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
   return (
     <>
@@ -18,7 +19,7 @@ const Chat = ({ own , messages}  ) => {
               </span>
             </div> 
               <div className="text-gray-400">
-                CreatedAt 00:00
+                {time}
               </div>
           </div>
         </div>
@@ -33,7 +34,7 @@ const Chat = ({ own , messages}  ) => {
                 </span>
               </div>
                 <div className="text-gray-400">
-                  CreatedAt 00:00
+                  {time}
                 </div>  
             </div>
           </div>
@@ -47,7 +48,7 @@ const Chat = ({ own , messages}  ) => {
                 </span>
               </div>
                 <div className="text-gray-400">
-                  CreatedAt 00:00
+                  {time}
                 </div>  
             </div>
           </div>
