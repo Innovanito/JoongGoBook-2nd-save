@@ -59,12 +59,10 @@ const MessageWindow = () => {
     }
   }
 
-  useEffect(() => {
-    const chatData = fetchDmData('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') //hard-coded but have to fix it later
-    console.log(chatData);
+  useEffect(async () => {
+    const chatData = await fetchDmData('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') //hard-coded but have to fix it later
   }, [])
 
-  console.log(newMessage);
 
   return (
     <div className="flex-1 min-w-0 bg-white xl:flex relative ">
@@ -123,13 +121,11 @@ const MessageWindow = () => {
             className="flex flex-col space-y-4 p-3 overflow-y-auto scroll-m-2 w-full"
           >
             {/* first chat */}
-            <Chat own={true} />
-            <Chat messages={messages} />
-            <Chat own={true} />
-            <Chat own={true} />
-            <Chat own={true} />
-            <Chat own={true} />
-            <Chat messages={messages} />
+            <Chat own={true} /> 
+            {messages?.chat?.map(message => 
+              <Chat own={false} message={message} />
+            )}
+            <Chat messages={'메시지 택스트'} />
           </div>
           {/* message ends here */}
 
