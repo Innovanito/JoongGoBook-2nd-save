@@ -29,6 +29,7 @@ const DM = () => {
     <div>
       <MessageHeader />
       <MessageWindow />
+      {/* {userId == owner ? <MessageWindowOwner /> : <MessageWindowBuyer />} */}
     </div>
   )
 }

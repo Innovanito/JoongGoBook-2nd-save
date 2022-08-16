@@ -3,7 +3,7 @@ import userIcon  from '../assets/user-icon.png'
 import threeDots from '../assets/three_dots.png' 
 import plus from '../assets/plus.jpg'
 import Chat from './Chat.jsx'
-import { useState, useEffect } from 'react'
+import { useState, useEffect , useRef} from 'react'
 import { dmData } from '../utils/data'
 import { client } from '../client'
 import { v4 as uuidv4 } from 'uuid'
@@ -13,6 +13,7 @@ const MessageWindow = () => {
   const [messages, setMessages] = useState()
   const [newMessage, setNewMessage] = useState("")
   const [loading, setLoading] = useState(false)
+  const scrollRef = useRef()
 
   let presentTime = new Date();
 
@@ -31,8 +32,7 @@ const MessageWindow = () => {
           postedBy: {
              // hard-coded, so fix it later, userId is zcx123
             _type: 'postedBy',
-            _ref: 'drafts.x0zDxxmL6w5GbC0bnbb5OR', 
-            // _id: 'drafts.x0zDxxmL6w5GbC0bnbb5OR'
+            _ref: 'drafts.x0zDxxmL6w5GbC0bnbb5OR',
           }
         }])
         .commit()
@@ -54,7 +54,7 @@ const MessageWindow = () => {
             }
           )
       } catch (err) {
-        console.log(err);
+        console.log(err); 
       }
     }
   }
@@ -62,6 +62,11 @@ const MessageWindow = () => {
   useEffect(async () => {
     const chatData = await fetchDmData('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') //hard-coded but have to fix it later
   }, [])
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({behavior: 'smooth'})
+  }, [messages])
+  
 
 
   return (
@@ -121,11 +126,11 @@ const MessageWindow = () => {
             className="flex flex-col space-y-4 p-3 overflow-y-auto scroll-m-2 w-full"
           >
             {/* first chat */}
-            <Chat own={true} /> 
             {messages?.chat?.map(message => 
-              <Chat own={false} message={message} />
+              <div ref={scrollRef}>
+                <Chat own={false} message={message} />
+              </div>
             )}
-            <Chat messages={'메시지 택스트'} />
           </div>
           {/* message ends here */}
 

@@ -103,7 +103,7 @@ const UserProfile = ({user}) => {
                   render={(renderProps) => (
                     <button
                       type='button'
-                      className='bg-white flex flex-col items-center justify-center p-2 rounded-full cursor-pointer outline-none shadow-md'
+                      className='bg-white flex flex-col items-center justify-center p-4 m-2 rounded-full cursor-pointer outline-none shadow-md'
                       onClick={renderProps.onClick}
                       disabled={renderProps.disabled}
                     >

@@ -194,7 +194,8 @@ export const accountIdAndPw = (userId) => {
     password,
     userNickname,
     userEmail,
-    userName
+    userName,
+    _id
   }`;
   return query;
 };
