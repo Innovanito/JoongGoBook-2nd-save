@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react'
 const Chat = ({ own, message }) => {
   const [userOnScreen, setUserOnScreen] = useState()
   const [owner, setOwner] = useState(true)
+  const [date, setDate] = useState([])
+  const [hour, setHour] = useState()
+  const [minute, setMinute] = useState()
 
   // {userOnScreen == buyer ? cssLayout1 : cssLayout2}
   // Chat의 postedBy의 변수가 buyer일 경우 cssLayout1
@@ -13,11 +16,11 @@ const Chat = ({ own, message }) => {
   const getUserOnScreen = () => {
     const userInfo = JSON.parse(localStorage.getItem('user'))
 
-    console.log(userInfo);
+    // console.log(userInfo);
 
     setUserOnScreen(userInfo?._id)
 
-    console.log('userOnScreen value ', userOnScreen);
+    // console.log('userOnScreen value ', userOnScreen);
   }
 
 
@@ -25,22 +28,30 @@ const Chat = ({ own, message }) => {
     let ex = message?.chatTime
     
     let ex2 = ex?.split('T')
-    // console.log(ex2[0]);
+
+    let todayTime = ex2[1].split(':')
+
+    setDate(ex2[0])
+    let hour1 = todayTime[0]
+    setMinute(todayTime[1])
+
+    setHour((parseInt(hour1) + 9) % 24)
   }
-  // console.log('message time  in Chat.jsx',message?.chatTime);
 
   useEffect(() => {
-    timeFormat()
+    timeFormat(message)
   }, [])
 
   useEffect(() => {
     getUserOnScreen()
-    console.log('message.postedBy value', message?.postedBy._id);
+    // console.log('message.postedBy value', message?.postedBy._id);
     if (userOnScreen == message.postedBy._id) {
-      console.log('buyer message !');
+      // debugger로 찍어본 결과 userOnScreen도 undefined임
+      // message.postedBy에서 _id의 값이 아예 없다
+      // console.log('buyer message !');
       setOwner(false)
     } else {
-      console.log('setOwner message is true so the message is on the left');
+      // console.log('setOwner message is true so the message is on the left');
     }
   }, [])
 
@@ -57,7 +68,8 @@ const Chat = ({ own, message }) => {
               </span>
             </div> 
               <div className="text-gray-400">
-                {message?.chatTime}
+                  <span>{date}</span>
+                  <span>{hour}시 {minute}분</span>
               </div>
           </div>
         </div>
@@ -71,9 +83,8 @@ const Chat = ({ own, message }) => {
                 </span>
               </div>
                 <div className="text-gray-400">
-                  {message?.chatTime}
-                {/* <span>{date}</span> */}
-                {/* <span>{hours}시 {minutes}분</span> */}
+                  <span>{date} / </span>
+                  <span>{hour}시 {minute}분</span>
                 </div>  
             </div>
           </div>

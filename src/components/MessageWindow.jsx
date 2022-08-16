@@ -21,27 +21,32 @@ const MessageWindow = () => {
     e.preventDefault()
     setLoading(true)
 
+    let messageData = {
+      text :newMessage,
+      _key: uuidv4(),
+      chatTime: presentTime,
+      postedBy: {
+          // hard-coded, so fix it later, userId is zcx123
+        _type: 'postedBy',
+        _ref: 'drafts.x0zDxxmL6w5GbC0bnbb5OR'
+      }
+    }
+
     if (newMessage) {
       client
         .patch('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') // hard-coded, so fix it later, coversationId is firstDm
         .setIfMissing({ chat: []})
-        .insert('after', 'chat[-1]', [{
-          text :newMessage,
-          _key: uuidv4(),
-          chatTime: presentTime,
-          postedBy: {
-             // hard-coded, so fix it later, userId is zcx123
-            _type: 'postedBy',
-            _ref: 'drafts.x0zDxxmL6w5GbC0bnbb5OR',
-          }
-        }])
+        .insert('after', 'chat[-1]', [
+          messageData
+        ])
         .commit()
         .then(() => {
+          console.log(messages);
+          setMessages([...messages.chat], messageData )
           setNewMessage("")
           setLoading(false)
         })
     }
-
   }
 
   const fetchDmData = (dmId) => {
@@ -61,11 +66,12 @@ const MessageWindow = () => {
 
   useEffect(async () => {
     const chatData = await fetchDmData('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') //hard-coded but have to fix it later
-  }, [])
+  }, [messages])
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({behavior: 'smooth'})
   }, [messages])
+
   
 
 
