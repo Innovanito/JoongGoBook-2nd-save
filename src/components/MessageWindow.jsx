@@ -131,12 +131,20 @@ const MessageWindow = () => {
             id="messages"
             className="flex flex-col space-y-4 p-3 overflow-y-auto scroll-m-2 w-full"
           >
-            {/* first chat */}
-            {messages?.chat?.map(message => 
+            {
+              messages ?
+              messages?.chat?.map(message => 
               <div ref={scrollRef}>
                 <Chat own={false} message={message} />
               </div>
-            )}
+              ) :
+              <div
+                className=' w-656 h-96 text-center text-gray-400 '
+              >
+                <h1>아직 작성한 메시지가 없습니다</h1>
+                <h1>거래를 위해 채팅을 시작해볼까요?</h1>
+              </div>
+            }
           </div>
           {/* message ends here */}
 

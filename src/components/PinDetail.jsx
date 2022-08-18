@@ -19,7 +19,8 @@ const PinDetail = ({user}) => {
   const [dmParam, setDmParam] = useState()  
 
   const createOrLinkDm = () => {
-    console.log('done!');
+    // if dmParam document were exist in the sanity documentation, do the link transition to that address.
+  // else create a document that the title is dmParam, and transite the link to the address
   }
 
   const createDmAddress = () => {
@@ -148,9 +149,9 @@ const PinDetail = ({user}) => {
         (user?._id === pinDetail?.postedBy._id ?
           null :
           <Link
-            to={`/DM/${dmParam}`}
-            className=' h-10 w-50 font-bold text-xl text-lime-800 bg-slate-200 rounded-lg mr-3 mt-3 text-center'
-            onClick={createOrLinkDm}
+          onClick={createOrLinkDm}
+          className=' h-10 w-50 font-bold text-xl text-lime-800 bg-slate-200 rounded-lg mr-3 mt-3 text-center'
+          to={`/DM/${dmParam}`}
           >
             판매자와 대화하기
           </Link>
