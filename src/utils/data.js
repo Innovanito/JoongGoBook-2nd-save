@@ -26,6 +26,7 @@ export const userQueryForMyAccount2 = (userId) => {
   return query
 }
 
+
 export const bringDefaultImage = () => {
   const query =`*[_type == "defaultImage" && title match 'userIcon'] {
     image {

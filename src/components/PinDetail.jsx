@@ -3,7 +3,7 @@ import {Link, useParams} from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 
 import { client,urlFor} from '../client'
-import { pinDetailQuery} from '../utils/data'
+import { pinDetailQuery, userQueryForMyAccount} from '../utils/data'
 import Spinner from './Spinner'
 
 import schoolLogo from '../assets/school.png'
@@ -16,14 +16,36 @@ const PinDetail = ({user}) => {
   const [addingComment, setAddingComment] = useState(false)
   const { pinId } = useParams()
   const [isGoogleAccount, setIsGoogleAccount] = useState(pinDetail?.postedBy?._id)
+  const [dmParam, setDmParam] = useState()  
 
+  const createOrLinkDm = () => {
+    console.log('done!');
+  }
+
+  const createDmAddress = () => {
+    const localData = localStorage.getItem('user')
+    let idData = JSON.parse(localData)
+    // 현재 브라우저 사용자가 accountInfo일때
+    if (idData.userName?.length) {
+      const query = userQueryForMyAccount(idData._id)
+      if (query) {
+        client.fetch(query)
+          .then((data) => {
+            let user_id = data[0]._id
+            setDmParam(pinId.concat('_').concat(user_id))
+          })
+      }
+    } else {
+      let user_id = idData.googleId
+      setDmParam(pinId.concat('_').concat(user_id))
+    }
+  }
   
   const fetchPinDetails = () => {
     const query = pinDetailQuery(pinId)
     if (query) {
       client.fetch(query)
         .then((data) => {
-          console.log('data info', data[0]);
           setPinDetail(data[0])
         })
     }
@@ -51,10 +73,6 @@ const PinDetail = ({user}) => {
           setAddingComment(false)
         })
     }
-  }
-
-  const fetchMessageId = () => {
-
   }
 
     const createMeesage = () => {
@@ -85,11 +103,16 @@ const PinDetail = ({user}) => {
     fetchPinDetails() 
   }, [pinId])
 
+  useEffect(() => {
+    createDmAddress()
+  }, [dmParam])
+  
+
 
   if(!pinDetail) return <Spinner message='상품을 불러오고있습니다' />
 
   return (
-    <div className='flex flex-col m-auto pl-8 mt-3 bg-white' style={{ maxWidth: '1500px', borderRadius: '32px'}}>
+    <div className='flex flex-col m-auto pl-8 my-2 bg-white' style={{ maxWidth: '1500px', borderRadius: '32px'}}>
       <div className="flex justify-center items-center w-350">
         <img
           src={pinDetail?.image && urlFor(pinDetail?.image).url()}
@@ -125,17 +148,19 @@ const PinDetail = ({user}) => {
         (user?._id === pinDetail?.postedBy._id ?
           null :
           <Link
-            to={'/DM'}
-            className=' h-10 w-50 font-bold text-xl text-lime-600 bg-slate-200 rounded-lg mr-3 text-center'
+            to={`/DM/${dmParam}`}
+            className=' h-10 w-50 font-bold text-xl text-lime-800 bg-slate-200 rounded-lg mr-3 mt-3 text-center'
+            onClick={createOrLinkDm}
           >
             판매자와 대화하기
           </Link>
         ) :
-        <h3 className=' font-bold text-xl text-gray-400 mt-3 mb-3'>
+        <h3 className=' font-bold text-xl text-gray-400 my-3 mb-5 '>
           판매자와 대화를 위해 로그인을 해주세요
         </h3>
       }
-      <h2 className='mt-3 text-2xl'>댓글들</h2>
+      {/* 댓글 기능 비활성화 시킴(DM 기능이 있어서) */}
+      {/* <h2 className='mt-3 text-2xl'>댓글들</h2>
       <div className="max-h-370 overflow-y-auto">
         {pinDetail?.comments?.map((comment, i) => (
           <div className="flex gap-2 mt-5 items-center bg-white rounded-lg" key={i} >
@@ -180,7 +205,7 @@ const PinDetail = ({user}) => {
         ) : (
           <h1 className=' flex items-center text-gray-400 mb-2'> 댓글 게시를 위해 로그인을 해주세요</h1>
         )}
-      </div>
+      </div> */}
     </div>
   )
 }

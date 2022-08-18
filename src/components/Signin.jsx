@@ -75,7 +75,7 @@ const Signin = () => {
             setIsLoading(false)
             navigate('/', { replace: true })
           } else {
-            alert('일치하는 아이디나 비번이 없습니다')
+            alert('일치하는 아이디나 비밀번호가 없습니다')
             setIsLoading(false)
           }
         })
