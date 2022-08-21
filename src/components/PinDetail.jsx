@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useParams, useNavigate} from 'react-router-dom'
 import {v4 as uuidv4} from 'uuid'
 
 import { client,urlFor} from '../client'
@@ -11,16 +11,32 @@ import moneyIcon from '../assets/money-icon.png'
 
 
 const PinDetail = ({user}) => {
+  const navigate = useNavigate()
   const [pinDetail, setPinDetail] = useState(null)
   const [comment, setComment] = useState('')
   const [addingComment, setAddingComment] = useState(false)
   const { pinId } = useParams()
   const [isGoogleAccount, setIsGoogleAccount] = useState(pinDetail?.postedBy?._id)
   const [dmParam, setDmParam] = useState()  
+  const [user_id, setUser_id] = useState()
 
   const createOrLinkDm = () => {
-    // if dmParam document were exist in the sanity documentation, do the link transition to that address.
-  // else create a document that the title is dmParam, and transite the link to the address
+
+    const doc = {
+      _id: dmParam,
+      _type: 'dm',
+      sender: user_id, 
+    }
+
+    client.createIfNotExists(doc)
+      // if dmParam document were exist in the sanity documentation, do the link transition to that address
+      .then(() => {
+        navigate(`/DM/${dmParam}`, { replace: true })
+      })
+      // else create a document that the title is dmParam, and transite the link to the address
+      .catch(() => {
+        navigate(`/DM/${dmParam}`, { replace: true })
+      })
   }
 
   const createDmAddress = () => {
@@ -32,7 +48,7 @@ const PinDetail = ({user}) => {
       if (query) {
         client.fetch(query)
           .then((data) => {
-            let user_id = data[0]._id
+            setUser_id(data[0]._id)
             setDmParam(pinId.concat('_').concat(user_id))
           })
       }
@@ -148,13 +164,12 @@ const PinDetail = ({user}) => {
         user?._id ?
         (user?._id === pinDetail?.postedBy._id ?
           null :
-          <Link
-          onClick={createOrLinkDm}
-          className=' h-10 w-50 font-bold text-xl text-lime-800 bg-slate-200 rounded-lg mr-3 mt-3 text-center'
-          to={`/DM/${dmParam}`}
+          <button
+            onClick={createOrLinkDm}
+            className=' h-10 w-50 font-bold text-xl text-lime-800 bg-slate-200 rounded-lg mr-3 mt-3 text-center'
           >
             판매자와 대화하기
-          </Link>
+          </button>
         ) :
         <h3 className=' font-bold text-xl text-gray-400 my-3 mb-5 '>
           판매자와 대화를 위해 로그인을 해주세요

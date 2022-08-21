@@ -4,18 +4,43 @@ import threeDots from '../assets/three_dots.png'
 import plus from '../assets/plus.jpg'
 import Chat from './Chat.jsx'
 import { useState, useEffect , useRef} from 'react'
-import { dmData } from '../utils/data'
-import { client } from '../client'
+import { dmData, dm_idData, pinDetailQuery, userQueryForMyAccount} from '../utils/data'
+import { client, urlFor } from '../client'
 import { v4 as uuidv4 } from 'uuid'
 import SmallSpinner from './SmallSpinner'
 
+//query를 이용해서 Pindetail.jsx에 dmParam을 가져오고, 
+// dmParam을 이용해서 하드코딩 되어있는 부분 고쳐주기
+
 const MessageWindow = () => {
-  const [messages, setMessages] = useState()
+  const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState("")
   const [loading, setLoading] = useState(false)
+  const [dmAddress, setDmAddress] = useState()
+  const [pinDetail, setPinDetail] = useState()
+  const [user_id, setUser_id] = useState()
   const scrollRef = useRef()
+  const [pageAddress, setPageAddress] = useState()
 
   let presentTime = new Date();
+
+  const fetchUser_id = () => {
+    const localData = localStorage.getItem('user')
+    let idData = JSON.parse(localData)
+    // 현재 브라우저 사용자가 accountInfo일때
+    if (idData.userName?.length) {
+      const query = userQueryForMyAccount(idData._id)
+      if (query) {
+        client.fetch(query)
+          .then((data) => {
+            setUser_id(data[0]._id)
+          })
+      }
+    } else {
+      setUser_id(idData.googleId)
+    }
+  }
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -28,21 +53,21 @@ const MessageWindow = () => {
       postedBy: {
           // hard-coded, so fix it later, userId is zcx123
         _type: 'postedBy',
-        _ref: 'drafts.x0zDxxmL6w5GbC0bnbb5OR'
+        _ref: user_id
       }
     }
 
     if (newMessage) {
       client
-        .patch('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') // hard-coded, so fix it later, coversationId is firstDm
+        .patch(pageAddress) // hard-coded, so fix it later, coversationId is firstDm
         .setIfMissing({ chat: []})
         .insert('after', 'chat[-1]', [
           messageData
         ])
         .commit()
         .then(() => {
-          console.log(messages);
-          setMessages([...messages.chat], messageData )
+          console.log('messages data', messages);
+          messages?  setMessages(messageData) : setMessages([...messages?.chat], messageData )
           setNewMessage("")
           setLoading(false)
         })
@@ -64,15 +89,56 @@ const MessageWindow = () => {
     }
   }
 
-  useEffect(async () => {
-    const chatData = await fetchDmData('4261ecf4-2f18-4deb-83e5-5ea33c9301d0') //hard-coded but have to fix it later
+    const fetchDm_idData = () => {
+    const query = dm_idData()
+    if (query) {
+      try {
+        client.fetch(query)
+          .then((data) => {
+            setDmAddress(data[0])
+            }
+          )
+      } catch (err) {
+        console.log(err); 
+      }
+    }
+  }
+  
+  const fetchPinDetails = () => {
+    const currentUrl = window.location.href
+
+    const pinId = currentUrl.match(/DM\/[A-Za-z0-9]+/g)[0].substr(3)
+
+    setPageAddress(currentUrl.match(/DM\/[A-Za-z0-9_.]+/g)[0].substr(3))
+
+    const query = pinDetailQuery(pinId)
+    if (query) {
+      client.fetch(query)
+        .then((data) => {
+          setPinDetail(data[0])
+        })
+    }
+  }
+
+
+  useEffect( () => {
+    fetchDmData(pageAddress) 
   }, [messages])
+
+  useEffect( () => {
+    // fetch all the DM address in the backend data
+    fetchDm_idData() 
+  }, [])
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({behavior: 'smooth'})
   }, [messages])
 
-  
+  useEffect( () => {
+    fetchPinDetails() 
+    fetchUser_id()
+  }, [])
+
 
 
   return (
@@ -84,18 +150,19 @@ const MessageWindow = () => {
               <div className="flex-shrink-0">
                 <img
                   className='h-12 w-12 rounded-full'
-                  src="https://source.unsplash.com/1600x900/?library"
-                  alt="person"
+                  src={pinDetail?.image && urlFor(pinDetail?.image).url()}
+                  alt="book-img"
                 />
               </div>
               <div className="flex-1 min-w-0">
                 <a href="#" className="focus:outline-none">
-                  <p className=' pl-3 font-bold text-gray-900 text-lg text-center'> 상품 이름</p>
-                  <p className="text-sm font-bold text-red-400 text-center">
+                  <p className=' pl-3 font-bold text-gray-900 text-lg text-center py-3'> {pinDetail?.title}</p>
+                  <p className="text-sm font-bold text-red-400 text-center pb-2">
+                    {/* 나중에 거래완료나 게시물 작성자가 회원탈퇴를 했을 경우 판매중 -> 거래 불가로 동적으로 바꾸기 */}
                     판매중
                   </p>
                   <p className="text-sm text-gray-500 truncate text-center">
-                    가격(원)
+                    <span>{pinDetail?.price}</span>(원)
                   </p>
                 </a>
               </div>
@@ -114,7 +181,15 @@ const MessageWindow = () => {
               />
               <div className="flex flex-col leading-tight">
                 <div className="text-xl mt-1 flex items-center ">
-                  <span className=" text-gray-700 mr-3">상대방 이름2</span>
+                  <span className=" text-gray-700 mr-1">
+                    {/* buyer-> seller의 입장의 UI이고, seller에서 -> buyer의 입장의 UI는 따로 만들어야 함 */}
+                    {
+                      pinDetail?.postedBy.userName ?
+                      pinDetail?.postedBy.userName :
+                      pinDetail?.postedBy.userNickname
+                    }
+                  </span>
+                  <span>님과의 채팅</span>
                 </div>
               </div>
             </div>
@@ -126,16 +201,15 @@ const MessageWindow = () => {
             </div>
           </div>
       
-          {/* message starts in here */}
           <div
             id="messages"
             className="flex flex-col space-y-4 p-3 overflow-y-auto scroll-m-2 w-full"
           >
             {
-              messages ?
-              messages?.chat?.map(message => 
+              messages.length ?
+              messages?.chat?.map((message, i) => 
               <div ref={scrollRef}>
-                <Chat own={false} message={message} />
+                <Chat message={message} key={i} />
               </div>
               ) :
               <div
@@ -146,7 +220,6 @@ const MessageWindow = () => {
               </div>
             }
           </div>
-          {/* message ends here */}
 
           {/* chatting window starts */}
           <div className="border-t-2 border-gray-200 px-4 py-4 mt-3 mb-3 flex justify-between m-2 items-center">

@@ -95,7 +95,7 @@ const Home = () => {
           <Routes>
             <Route path='/user-profile/:userId' element={<UserProfile user={user && user} />} />
             <Route path='/*' element={<Pins user={user && user} />} />
-            <Route path='DM' element={<DM  />} />
+            <Route path='DM/:dmParam' element={<DM  />} />
           </Routes>
         </div>
       </div>

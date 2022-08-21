@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 
 
-const Chat = ({ own, message }) => {
+const Chat = ({ message }) => {
   const [userOnScreen, setUserOnScreen] = useState()
   const [owner, setOwner] = useState(true)
   const [date, setDate] = useState([])

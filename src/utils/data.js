@@ -112,7 +112,8 @@ export const pinDetailQuery = (pinId) => {
       postedBy->{
         _id,
         userName,
-        image
+        image,
+        userNickname
       },
     },
     comments[]{
@@ -202,8 +203,16 @@ export const accountIdAndPw = (userId) => {
 };
 
 export const dmData = (dmId) => {
-  const query =`*[_type == 'dm']{
+  const query =`*[_type == 'dm' && _id == '${dmId}]{
     chat
+  }`
+  return query
+}
+
+
+export const dm_idData = () => {
+  const query =`*[_type == 'dm']{
+    _id
   }`
   return query
 }
