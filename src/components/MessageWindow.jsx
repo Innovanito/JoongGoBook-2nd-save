@@ -1,13 +1,12 @@
-import React from 'react'
-import userIcon  from '../assets/user-icon.png'
-import threeDots from '../assets/three_dots.png' 
+
 import plus from '../assets/plus.jpg'
-import Chat from './Chat.jsx'
 import { useState, useEffect , useRef} from 'react'
 import { dmData, dm_idData, pinDetailQuery, userQueryForMyAccount} from '../utils/data'
 import { client, urlFor } from '../client'
 import { v4 as uuidv4 } from 'uuid'
 import SmallSpinner from './SmallSpinner'
+import audio from '../assets/message_sound.mp3'
+import BuyerWindow from './BuyerWindow.jsx'
 
 //query를 이용해서 Pindetail.jsx에 dmParam을 가져오고, 
 // dmParam을 이용해서 하드코딩 되어있는 부분 고쳐주기
@@ -36,6 +35,7 @@ const MessageWindow = () => {
             setUser_id(data[0]._id)
           })
       }
+    // 현재 브라우저 사용자가 googleId일때
     } else {
       setUser_id(idData.googleId)
     }
@@ -46,12 +46,15 @@ const MessageWindow = () => {
     e.preventDefault()
     setLoading(true)
 
+
+
+    // 메시지 보냄 사운드 작동이 안함
+
     let messageData = {
       text :newMessage,
       _key: uuidv4(),
       chatTime: presentTime,
       postedBy: {
-          // hard-coded, so fix it later, userId is zcx123
         _type: 'postedBy',
         _ref: user_id
       }
@@ -59,7 +62,7 @@ const MessageWindow = () => {
 
     if (newMessage) {
       client
-        .patch(pageAddress) // hard-coded, so fix it later, coversationId is firstDm
+        .patch(pageAddress)
         .setIfMissing({ chat: []})
         .insert('after', 'chat[-1]', [
           messageData
@@ -67,14 +70,17 @@ const MessageWindow = () => {
         .commit()
         .then(() => {
           console.log('messages data', messages);
-          messages?  setMessages(messageData) : setMessages([...messages?.chat], messageData )
+          // 이 부분을 바꿔줘야함 왜냐하면 backend에서 지운 messages를 UI상에서 반영하려면 배열 ... spread operator를 그냥 사용하면 안 됌
+          messages? setMessages([...messages?.chat], messageData) : setMessages(messageData) 
+          audio.play()
           setNewMessage("")
           setLoading(false)
         })
     }
   }
 
-  const fetchDmData = (dmId) => {
+
+  const fetchDmChatData = (dmId) => {
     const query = dmData(dmId)
     if (query) {
       try {
@@ -89,7 +95,8 @@ const MessageWindow = () => {
     }
   }
 
-    const fetchDm_idData = () => {
+  //나중에 dm_id를 parameter로 사용할수도... 아니면 안 할 수도
+  const fetchDm_idData = () => {
     const query = dm_idData()
     if (query) {
       try {
@@ -122,8 +129,10 @@ const MessageWindow = () => {
 
 
   useEffect( () => {
-    fetchDmData(pageAddress) 
-  }, [messages])
+    fetchDmChatData(pageAddress) 
+    console.log('fetch dm chat data working');
+  }, [pageAddress,messages, newMessage])
+  
 
   useEffect( () => {
     // fetch all the DM address in the backend data
@@ -136,8 +145,9 @@ const MessageWindow = () => {
 
   useEffect( () => {
     fetchPinDetails() 
-    fetchUser_id()
+    fetchUser_id() 
   }, [])
+
 
 
 
@@ -171,55 +181,8 @@ const MessageWindow = () => {
         </div>
       </div>
       <div className="flex-1 p:2 sm:pb-6 justify-between flex flex-col h-screen xl:flex bg-white overflow-y-scroll"> 
-        <div className="h-full">
-          <div className="flex sm:items-center justify-between py-3 border-b border-gray-200 p-3">
-            <div className="flex items-center space-x-4">
-              <img
-                src={userIcon}
-                alt="user-icon"
-                className=' w-10 sm:w-12 h-10 sm:h-12 rounded-full cursor-pointer'
-              />
-              <div className="flex flex-col leading-tight">
-                <div className="text-xl mt-1 flex items-center ">
-                  <span className=" text-gray-700 mr-1">
-                    {/* buyer-> seller의 입장의 UI이고, seller에서 -> buyer의 입장의 UI는 따로 만들어야 함 */}
-                    {
-                      pinDetail?.postedBy.userName ?
-                      pinDetail?.postedBy.userName :
-                      pinDetail?.postedBy.userNickname
-                    }
-                  </span>
-                  <span>님과의 채팅</span>
-                </div>
-              </div>
-            </div>
-          
-            <div className="flex  items-center space-x-2">
-              <button className=' pointer-events-none inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none'>
-                <img src={threeDots} alt="three-dots" />
-              </button>
-            </div>
-          </div>
-      
-          <div
-            id="messages"
-            className="flex flex-col space-y-4 p-3 overflow-y-auto scroll-m-2 w-full"
-          >
-            {
-              messages.length ?
-              messages?.chat?.map((message, i) => 
-              <div ref={scrollRef}>
-                <Chat message={message} key={i} />
-              </div>
-              ) :
-              <div
-                className=' w-656 h-96 text-center text-gray-400 '
-              >
-                <h1>아직 작성한 메시지가 없습니다</h1>
-                <h1>거래를 위해 채팅을 시작해볼까요?</h1>
-              </div>
-            }
-          </div>
+        <div className="h-full"> 
+          <BuyerWindow messages={messages} pinDetail={pinDetail} />
 
           {/* chatting window starts */}
           <div className="border-t-2 border-gray-200 px-4 py-4 mt-3 mb-3 flex justify-between m-2 items-center">

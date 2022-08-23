@@ -203,7 +203,7 @@ export const accountIdAndPw = (userId) => {
 };
 
 export const dmData = (dmId) => {
-  const query =`*[_type == 'dm' && _id == '${dmId}]{
+  const query =`*[_type == 'dm' && _id == '${dmId}']{
     chat
   }`
   return query

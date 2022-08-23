@@ -1,8 +1,10 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
+import { client } from '../client'
+import { userQueryForMyAccount  } from '../utils/data'
 
 
-const Chat = ({ message }) => {
+const BuyerChat  = ({ message}) => {
   const [userOnScreen, setUserOnScreen] = useState()
   const [owner, setOwner] = useState(true)
   const [date, setDate] = useState([])
@@ -16,11 +18,25 @@ const Chat = ({ message }) => {
   const getUserOnScreen = () => {
     const userInfo = JSON.parse(localStorage.getItem('user'))
 
-    // console.log(userInfo);
-
-    setUserOnScreen(userInfo?._id)
-
-    // console.log('userOnScreen value ', userOnScreen);
+    //accountInfo일때
+    if (userInfo?.userName) {
+      const query = userQueryForMyAccount(userInfo._id)
+      if (query) {
+        try {
+          client.fetch(query)
+            .then((data) => {
+              setUserOnScreen(data[0]?._id)
+              }
+            )
+        } catch (err) {
+          console.log(err); 
+        }
+      }
+    }
+    //googleId일때 
+    else {
+      setUserOnScreen(userInfo?._id)
+    }
   }
 
 
@@ -44,20 +60,16 @@ const Chat = ({ message }) => {
 
   useEffect(() => {
     getUserOnScreen()
-    // console.log('message.postedBy value', message?.postedBy._id);
-    if (userOnScreen == message.postedBy._id) {
-      // debugger로 찍어본 결과 userOnScreen도 undefined임
-      // message.postedBy에서 _id의 값이 아예 없다
-      // console.log('buyer message !');
+    if (userOnScreen == message?.postedBy._ref ) {
       setOwner(false)
     } else {
-      // console.log('setOwner message is true so the message is on the left');
+      setOwner(true)
     }
-  }, [])
+  }, [message])
+
 
   return (
     <>
-      {/* {userOnScreen === } */}
       {owner ?
       <div className="chat-message">
         <div className="flex items-end">
@@ -68,7 +80,7 @@ const Chat = ({ message }) => {
               </span>
             </div> 
               <div className="text-gray-400">
-                  <span>{date}</span>
+                  <span>{date} / </span>
                   <span>{hour}시 {minute}분</span>
               </div>
           </div>
@@ -94,4 +106,4 @@ const Chat = ({ message }) => {
   )
 }
 
-export default Chat
+export default BuyerChat
