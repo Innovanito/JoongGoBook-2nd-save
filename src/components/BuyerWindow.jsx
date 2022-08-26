@@ -4,8 +4,12 @@ import threeDots from '../assets/three_dots.png'
 import { useRef } from 'react'
 import BuyerChat from './BuyerChat'
 
+
 const BuyerWindow = ({messages, pinDetail}) => {
+
   const scrollRef = useRef()
+
+  // console.log('pindetail in buyerWindow', pinDetail);
   
   return (
     <div>
@@ -21,7 +25,9 @@ const BuyerWindow = ({messages, pinDetail}) => {
               <span className=" text-gray-700 mr-1">
                 {
                   pinDetail?.postedBy.userName ?
+                  // 유저가 accountInfo일 때
                   pinDetail?.postedBy.userName :
+                  // 유저가 googleId일 때
                   pinDetail?.postedBy.userNickname
                 }
               </span>
@@ -44,7 +50,7 @@ const BuyerWindow = ({messages, pinDetail}) => {
           messages?.chat?.length ?
           messages?.chat?.map((message, i) => 
           <div ref={scrollRef}>
-            <BuyerChat message={message} key={i} />
+            <BuyerChat message={message} key={i}/>
           </div>
           ) :
           <div

@@ -5,15 +5,11 @@ import { userQueryForMyAccount  } from '../utils/data'
 
 
 const BuyerChat  = ({ message}) => {
-  const [userOnScreen, setUserOnScreen] = useState()
-  const [owner, setOwner] = useState(true)
   const [date, setDate] = useState([])
   const [hour, setHour] = useState()
   const [minute, setMinute] = useState()
+  const [userOnScreen, setUserOnScreen] = useState()
 
-  // {userOnScreen == buyer ? cssLayout1 : cssLayout2}
-  // Chat의 postedBy의 변수가 buyer일 경우 cssLayout1
-  // Chat의 postedBy의 변수가 seller일 경우  cssLayout2
 
   const getUserOnScreen = () => {
     const userInfo = JSON.parse(localStorage.getItem('user'))
@@ -39,7 +35,6 @@ const BuyerChat  = ({ message}) => {
     }
   }
 
-
   const timeFormat = ( message) => {
     let ex = message?.chatTime
     
@@ -56,21 +51,27 @@ const BuyerChat  = ({ message}) => {
 
   useEffect(() => {
     timeFormat(message)
-  }, [])
-
-  useEffect(() => {
     getUserOnScreen()
-    if (userOnScreen == message?.postedBy._ref ) {
-      setOwner(false)
-    } else {
-      setOwner(true)
-    }
-  }, [message])
-
+  }, [])
 
   return (
     <>
-      {owner ?
+      {message.postedBy._ref == userOnScreen ?
+      <div className="chat-message">
+        <div className="flex items-end justify-end">
+          <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-end">
+            <div>
+              <span className="px-4 py-2 rounded-full inline-block rounded-br-none bg-green-400 text-white text-lg">
+                {message?.text}
+              </span>
+            </div>
+              <div className="text-gray-400">
+                <span>{date} / </span>
+                <span>{hour}시 {minute}분</span>
+              </div>  
+          </div>
+        </div>
+      </div> :
       <div className="chat-message">
         <div className="flex items-end">
           <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
@@ -80,27 +81,12 @@ const BuyerChat  = ({ message}) => {
               </span>
             </div> 
               <div className="text-gray-400">
-                  <span>{date} / </span>
-                  <span>{hour}시 {minute}분</span>
+                <span>{date} / </span>
+                <span>{hour}시 {minute}분</span>
               </div>
           </div>
         </div>
-        </div> :
-        <div className="chat-message">
-          <div className="flex items-end justify-end">
-            <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-end">
-              <div>
-                <span className="px-4 py-2 rounded-full inline-block rounded-br-none bg-green-400 text-white text-lg">
-                  {message?.text}
-                </span>
-              </div>
-                <div className="text-gray-400">
-                  <span>{date} / </span>
-                  <span>{hour}시 {minute}분</span>
-                </div>  
-            </div>
-          </div>
-        </div>
+      </div> 
     }
     </>
   )

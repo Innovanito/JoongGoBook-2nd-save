@@ -47,9 +47,6 @@ const MessageWindow = () => {
     setLoading(true)
 
 
-
-    // 메시지 보냄 사운드 작동이 안함
-
     let messageData = {
       text :newMessage,
       _key: uuidv4(),
@@ -60,6 +57,8 @@ const MessageWindow = () => {
       }
     }
 
+    console.log('new message object', messageData);
+
     if (newMessage) {
       client
         .patch(pageAddress)
@@ -69,13 +68,14 @@ const MessageWindow = () => {
         ])
         .commit()
         .then(() => {
-          console.log('messages data', messages);
-          // 이 부분을 바꿔줘야함 왜냐하면 backend에서 지운 messages를 UI상에서 반영하려면 배열 ... spread operator를 그냥 사용하면 안 됌
-          messages? setMessages([...messages?.chat], messageData) : setMessages(messageData) 
-          audio.play()
+          console.log('messages data 1', messages);
+          messages?.chat.length ? setMessages([...messages?.chat], messageData) : setMessages(messageData) 
+          console.log('messages data 2', messages);
+          // audio.play()
           setNewMessage("")
           setLoading(false)
         })
+        .catch((err) => console.log(err))
     }
   }
 
@@ -114,15 +114,22 @@ const MessageWindow = () => {
   const fetchPinDetails = () => {
     const currentUrl = window.location.href
 
+    //pin의 _id 값
     const pinId = currentUrl.match(/DM\/[A-Za-z0-9]+/g)[0].substr(3)
 
+
+    // DM의 주소 값
     setPageAddress(currentUrl.match(/DM\/[A-Za-z0-9_.]+/g)[0].substr(3))
 
     const query = pinDetailQuery(pinId)
     if (query) {
-      client.fetch(query)
+      client
+        .fetch(query)
         .then((data) => {
           setPinDetail(data[0])
+        })
+        .catch((error) => {
+          console.error('Upload failed:', error.message)
         })
     }
   }
@@ -130,8 +137,7 @@ const MessageWindow = () => {
 
   useEffect( () => {
     fetchDmChatData(pageAddress) 
-    console.log('fetch dm chat data working');
-  }, [pageAddress,messages, newMessage])
+  }, [pageAddress, newMessage, messages?.chat?.length])
   
 
   useEffect( () => {
@@ -144,10 +150,13 @@ const MessageWindow = () => {
   }, [messages])
 
   useEffect( () => {
-    fetchPinDetails() 
     fetchUser_id() 
   }, [])
 
+  useEffect(() => {
+    fetchPinDetails() 
+  }, [pageAddress])
+  
 
 
 
