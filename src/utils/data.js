@@ -217,6 +217,14 @@ export const dm_idData = () => {
   return query
 }
 
+export const sidebarComponents = (user_id) => {
+  const query = `*[_type == 'dm' || buyer == '${user_id}' || seller == '${user_id}']{
+    _id
+  }`
+  return query
+}
+
+
 //260개 정도 목록이 있음
 export const univList = [
   '없음',
@@ -452,3 +460,28 @@ export const univList = [
   '홍익대학교',
 ]
 
+// 사용 안하는 함수들
+
+  // const addComment = () => {
+  //   if (comment) {
+  //     setAddingComment(true)
+
+  //     client
+  //       .patch(pinId)
+  //       .setIfMissing({ comments: []})
+  //       .insert('after', 'comments[-1]', [{
+  //         comment,
+  //         _key: uuidv4(),
+  //         postedBy: {
+  //           _type: 'postedBy',
+  //           _ref: user._id
+  //         }
+  //       }])
+  //       .commit()
+  //       .then(() => {
+  //         fetchPinDetails()
+  //         setComment('')
+  //         setAddingComment(false)
+  //       })
+  //   }
+  // }

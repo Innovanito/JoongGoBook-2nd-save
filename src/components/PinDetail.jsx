@@ -25,7 +25,9 @@ const PinDetail = ({user}) => {
     const doc = {
       _id: dmParam,
       _type: 'dm',
-      sender: user_id, 
+      buyer: user_id, 
+      seller: pinDetail?.postedBy._id,
+      dmTitle: pinDetail?.title + user_id
     }
 
     client.createIfNotExists(doc)
@@ -67,30 +69,7 @@ const PinDetail = ({user}) => {
         })
     }
   }
-  
-  const addComment = () => {
-    if (comment) {
-      setAddingComment(true)
 
-      client
-        .patch(pinId)
-        .setIfMissing({ comments: []})
-        .insert('after', 'comments[-1]', [{
-          comment,
-          _key: uuidv4(),
-          postedBy: {
-            _type: 'postedBy',
-            _ref: user._id
-          }
-        }])
-        .commit()
-        .then(() => {
-          fetchPinDetails()
-          setComment('')
-          setAddingComment(false)
-        })
-    }
-  }
 
     const createMeesage = () => {
     if (comment) {
@@ -123,6 +102,8 @@ const PinDetail = ({user}) => {
   useEffect(() => {
     createDmAddress()
   }, [dmParam])
+
+  console.log('pinDetail data in PinDetail.jsx', pinDetail);
   
 
 
