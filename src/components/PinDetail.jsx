@@ -103,7 +103,6 @@ const PinDetail = ({user}) => {
     createDmAddress()
   }, [dmParam])
 
-  console.log('pinDetail data in PinDetail.jsx', pinDetail);
   
 
 

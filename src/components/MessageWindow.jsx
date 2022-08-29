@@ -123,9 +123,9 @@ const MessageWindow = () => {
     const query = pinDetailQuery(pinId)
     if (query) {
       client
-        .fetch(query)
-        .then((data) => {
-          setPinDetail(data[0])
+      .fetch(query)
+      .then((data) => {
+        setPinDetail(data[0])
         })
         .catch((error) => {
           console.error('Upload failed:', error.message)
@@ -161,7 +161,7 @@ const MessageWindow = () => {
 
   return (
     <div className="flex-1 min-w-0 bg-white xl:flex relative ">
-      <DmSidebar pinDetail={pinDetail} />
+      <DmSidebar user_id={user_id} pinDetail={pinDetail} />
       <div className="flex-1 p:2 sm:pb-6 justify-between flex flex-col h-screen xl:flex bg-white overflow-y-scroll"> 
         <div className="h-full"> 
           <BuyerWindow messages={messages} pinDetail={pinDetail} />

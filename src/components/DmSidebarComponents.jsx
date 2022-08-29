@@ -1,31 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { client, urlFor } from '../client'
-import { sidebarComponents } from '../utils/data'
 
-const DmSidebar = ({pinDetail, user_id}) => {
-  const [dm_ids, setDm_ids] = useState()
 
-  const fetchSidebar_ids = (user_id) => {
-    const query = sidebarComponents(user_id)
-
-    if (query) {
-      client
-        .fetch(query)
-        .then((data) => {
-          console.log(data);
-          setDm_ids(data[0])
-        })
-        .catch((err) => console.log(err.message))
-    }
-  }
-
-  useEffect(() => {
-    fetchSidebar_ids(user_id)
-  }, [user_id])
-  
-
-  console.log('dm_ids in Dmsidebar.jsx', dm_ids);
-
+const DmSidebarComponents = ({pinDetail}) => {
   return (
     <div className="border-b border-gray-200 xl:border-b-0 xl:flex-shrink-0 xl:w-64 xl:border-gray-200 bg-gray-50">
       <div className="h-full pl-4 pr-2 py-6 sm:pl-6 lg:pl-8 xl:pl-0">
@@ -57,4 +34,4 @@ const DmSidebar = ({pinDetail, user_id}) => {
   )
 }
 
-export default DmSidebar
+export default DmSidebarComponents

@@ -218,7 +218,7 @@ export const dm_idData = () => {
 }
 
 export const sidebarComponents = (user_id) => {
-  const query = `*[_type == 'dm' || buyer == '${user_id}' || seller == '${user_id}']{
+  const query = `*[_type == 'dm' &&  seller == '${user_id}' || buyer == '${user_id}']{
     _id
   }`
   return query
