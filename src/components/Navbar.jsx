@@ -71,7 +71,7 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
             </Link>
           </div> }
         </div>
-        <div className="flex justify-between bg-gray-100 rounded-lg p-1">
+        <div className="flex justify-between bg-gray-200 rounded-lg p-1 border-solid mb-2" >
           <div className="flex text-gray-400">
             대학교 별로 중고책 찾기
           </div>

@@ -28,7 +28,10 @@ const DM = () => {
   return (
     <div>
       <MessageHeader />
-      <MessageWindow />
+      <div className="flex">
+        <MessageWindow />
+
+      </div>
       {/* {userId == owner ? <MessageWindowOwner /> : <MessageWindowBuyer />} */}
     </div>
   )

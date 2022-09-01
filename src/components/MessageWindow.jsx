@@ -13,7 +13,7 @@ import DmSidebar from './DmSidebar'
 // dmParam을 이용해서 하드코딩 되어있는 부분 고쳐주기
 
 const MessageWindow = () => {
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState()
   const [newMessage, setNewMessage] = useState("")
   const [loading, setLoading] = useState(false)
   const [dmAddress, setDmAddress] = useState()
@@ -69,7 +69,7 @@ const MessageWindow = () => {
         .commit()
         .then(() => {
           messages?.chat.length ? setMessages([...messages?.chat, messageData]) : setMessages([messageData]) 
-          console.log(messages);
+          console.log('messages data after useState', messages);
           // audio.play()
           setNewMessage("")
           setLoading(false)
