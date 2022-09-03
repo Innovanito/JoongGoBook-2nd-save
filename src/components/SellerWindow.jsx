@@ -5,8 +5,6 @@ import { useRef, useState, useEffect } from 'react'
 import BuyerChat from './BuyerChat'
 
 const SellerWindow = ({ messages, pinDetail }) => {
-  const [buyer_id, setBuyer_id] = useState(second)
-
 
   const scrollRef = useRef()
 
@@ -15,7 +13,6 @@ const SellerWindow = ({ messages, pinDetail }) => {
 
     const buyerInfo = currentUrl.match(/_\/[A-Za-z0-9]+/g)[0].substr(3)
 
-    setBuyer_id(buyerInfo)
   }
   
   return (
@@ -30,11 +27,7 @@ const SellerWindow = ({ messages, pinDetail }) => {
           <div className="flex flex-col leading-tight">
             <div className="text-xl mt-1 flex items-center ">
               <span className=" text-gray-700 mr-1">
-                {
-                  pinDetail?.postedBy.userName ?
-                  pinDetail?.postedBy.userName :
-                  pinDetail?.postedBy.userNickname
-                }
+                구매자의 이름란!
               </span>
               <span>님과의 채팅</span>
             </div>
@@ -55,7 +48,7 @@ const SellerWindow = ({ messages, pinDetail }) => {
           messages?.chat?.length ?
           messages?.chat?.map((message, i) => 
           <div ref={scrollRef}>
-            <BuyerChat message={message} key={i} />
+            <BuyerChat message={message} key={i}/>
           </div>
           ) :
           <div

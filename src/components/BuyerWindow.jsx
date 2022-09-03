@@ -9,7 +9,6 @@ const BuyerWindow = ({messages, pinDetail}) => {
 
   const scrollRef = useRef()
 
-  // console.log('pindetail in buyerWindow', pinDetail);
   
   return (
     <div>

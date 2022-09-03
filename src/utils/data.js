@@ -224,6 +224,13 @@ export const sidebarComponents = (user_id) => {
   return query
 }
 
+export const buyerData = (dmId) => {
+  const query = `*[_type == 'dm' && _id == '${dmId}']{
+    buyer
+  }`
+  return query
+}
+
 
 //260개 정도 목록이 있음
 export const univList = [

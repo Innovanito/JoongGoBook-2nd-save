@@ -4,7 +4,6 @@ import { client, urlFor } from '../client'
 
 const DmSidebarComponents = ({pinDetails}) => {
 
-  console.log(' pinDetails in  DmSidebarComponents', pinDetails);
   return (
     <>
       {pinDetails?.map((pinDetail) => (

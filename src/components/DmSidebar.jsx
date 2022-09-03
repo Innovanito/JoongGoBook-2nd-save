@@ -44,7 +44,6 @@ const DmSidebar = ({user_id}) => {
         client
         .fetch(query)
         .then((data) => {
-          console.log('data in fetch function', i, data[0]);
           pinArray[i] = data[0]
         })
         .catch((error) => {
@@ -52,9 +51,7 @@ const DmSidebar = ({user_id}) => {
         })
       }
     }
-    console.log('pinArray data before function ends', pinArray);
     setPinDetails(pinArray)
-    console.log('pinDetails info after client fetch', pinDetails );
   }
 
   useEffect(() => {
@@ -68,14 +65,17 @@ const DmSidebar = ({user_id}) => {
 
   useEffect(() => {
       fetchPinDetails(pin_ids)
+      console.log( 'pinDetails data after useEffect', pinDetails);
   }, [pin_ids.length])
-  console.log( 'pinDetails data after useEffect', pinDetails);
   
-
   return (
     <>
       <div className=" flex flex-col overflow-y-auto">
-        <DmSidebarComponents pinDetails={pinDetails} />
+        {
+          pinDetails ?
+          <DmSidebarComponents pinDetails={pinDetails} /> :
+          <h1>Didn't get the infos about DM Sidebar Components</h1>
+        }
       </div>
     </>
   )
