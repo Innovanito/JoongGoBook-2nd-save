@@ -2,7 +2,7 @@ import React from 'react'
 import userIcon  from '../assets/user-icon.png'
 import threeDots from '../assets/three_dots.png' 
 import { useRef } from 'react'
-import BuyerChat from './BuyerChat'
+import Chat from './Chat'
 
 
 const BuyerWindow = ({messages, pinDetail}) => {
@@ -49,7 +49,7 @@ const BuyerWindow = ({messages, pinDetail}) => {
           messages?.chat?.length ?
           messages?.chat?.map((message, i) => 
           <div ref={scrollRef}>
-            <BuyerChat message={message} key={i}/>
+            <Chat message={message} key={i}/>
           </div>
           ) :
           <div

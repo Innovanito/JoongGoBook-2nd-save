@@ -4,7 +4,7 @@ import { client } from '../client'
 import { userQueryForMyAccount  } from '../utils/data'
 
 
-const BuyerChat  = ({ message}) => {
+const Chat  = ({ message}) => {
   const [date, setDate] = useState([])
   const [hour, setHour] = useState()
   const [minute, setMinute] = useState()
@@ -92,4 +92,4 @@ const BuyerChat  = ({ message}) => {
   )
 }
 
-export default BuyerChat
+export default Chat
