@@ -8,7 +8,6 @@ import Chat from './Chat'
 const BuyerWindow = ({messages, pinDetail}) => {
 
   const scrollRef = useRef()
-
   
   return (
     <div>
@@ -24,9 +23,9 @@ const BuyerWindow = ({messages, pinDetail}) => {
               <span className=" text-gray-700 mr-1">
                 {
                   pinDetail?.postedBy.userName ?
-                  // 유저가 accountInfo일 때
-                  pinDetail?.postedBy.userName :
                   // 유저가 googleId일 때
+                  pinDetail?.postedBy.userName :
+                  // 유저가 accountInfo일 때
                   pinDetail?.postedBy.userNickname
                 }
               </span>

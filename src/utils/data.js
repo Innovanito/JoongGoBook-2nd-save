@@ -20,6 +20,12 @@ export const userQueryForMyAccount = (userId) => {
   return query
 }
 
+export const userInfoQuery = (userId) => {
+  const query =`*[_id == '${userId}' && _type == "user" || _type == "accountInfo"]`
+
+  return query
+}
+
 export const userQueryForMyAccount2 = (userId) => {
   const query =`*[_type == "accountInfo" && _id == '${userId}']`
 

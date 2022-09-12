@@ -59,19 +59,17 @@ const MessageWindow = () => {
       }
     }
 
-
     if (newMessage) {
       client
-        .patch(pageAddress)
-        .setIfMissing({ chat: []})
-        .insert('after', 'chat[-1]', [
-          messageData
-        ])
-        .commit()
-        .then(() => {
-          messages?.chat?.length ? setMessages([messages?.chat, messageData]) : setMessages([messageData]) 
-          console.log('messages data after useState', messages);
-          // audio.play()
+      .patch(pageAddress)
+      .setIfMissing({ chat: []})
+      .insert('after', 'chat[-1]', [
+        messageData
+      ])
+      .commit()
+      .then(() => {
+        messages?.chat?.length ? setMessages([...messages?.chat, messageData]) : setMessages([messageData]) 
+        // audio.play()
           setNewMessage("")
           setLoading(false)
         })
@@ -141,13 +139,14 @@ const MessageWindow = () => {
         client
           .fetch(query)
           .then((data) => {
-            setBuyer_id(data[0].buyer)
+            setBuyer_id(data[0]?.buyer)
           })
       } catch (err) {
         console.log(err); 
       }
     }
   }
+
 
 
   useEffect( () => {
@@ -163,11 +162,11 @@ const MessageWindow = () => {
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({behavior: 'smooth'})
+    console.log('messages info', messages);
   }, [messages])
 
   useEffect( () => {
-    fetchUser_id() 
-
+    fetchUser_id()
   }, [])
 
   useEffect(() => {
@@ -175,15 +174,15 @@ const MessageWindow = () => {
     fetchBuyer(pageAddress)
   }, [pageAddress])  
 
-  
+
   return (
     <div className="flex-1 min-w-0 bg-white xl:flex relative ">
       <DmSidebar user_id={user_id} pinDetail={pinDetail} />
       <div className="flex-1 p:2 sm:pb-6 justify-between flex flex-col h-screen xl:flex bg-white overflow-y-scroll"> 
         <div className="h-full"> 
-          {user_id == buyer_id ?
+          {user_id === buyer_id ?
             <BuyerWindow messages={messages} pinDetail={pinDetail} /> :
-            <SellerWindow messages={messages} pinDetail={pinDetail} /> 
+            <SellerWindow messages={messages} /> 
           }
           {/* chatting window starts */}
           <div className="border-t-2 border-gray-200 px-4 py-4 mt-3 mb-3 flex justify-between m-2 items-center">

@@ -3,18 +3,42 @@ import userIcon  from '../assets/user-icon.png'
 import threeDots from '../assets/three_dots.png' 
 import { useRef, useState, useEffect } from 'react'
 import Chat from './Chat'
+import { userInfoQuery } from '../utils/data'
+import { client} from '../client'
 
-const SellerWindow = ({ messages, pinDetail }) => {
+
+const SellerWindow = ({ messages}) => {
+  const [buyer_id, setBuyer_id] = useState()
+  const [buyerInfo, setBuyerInfo] = useState()
 
   const scrollRef = useRef()
 
   const fetchBuyerInfo = () => {
     const currentUrl = window.location.href
 
-    const buyerInfo = currentUrl.match(/_\/[A-Za-z0-9]+/g)[0].substr(3)
+    setBuyer_id(currentUrl.match(/_[A-Z0-9.]+/gi).toString().slice(1))
 
+    const query = userInfoQuery(buyer_id)
+
+    if (query) {
+      try {
+        client.fetch(query)
+          .then((data) => {
+            setBuyerInfo(data[0])
+            }
+          )
+      } catch (err) {
+        console.log(err); 
+      }
+    }
   }
-  
+
+  useEffect(() => {
+    fetchBuyerInfo()
+  }, [])
+
+  console.log('buyerInfo',buyerInfo);
+
   return (
     <div>
       <div className="flex sm:items-center justify-between py-3 border-b border-gray-200 p-3">
@@ -27,7 +51,11 @@ const SellerWindow = ({ messages, pinDetail }) => {
           <div className="flex flex-col leading-tight">
             <div className="text-xl mt-1 flex items-center ">
               <span className=" text-gray-700 mr-1">
-                구매자의 이름란!
+                {
+                  buyerInfo?.userNickname ?
+                  buyerInfo?.userNickname :
+                  buyerInfo?.userName
+                }
               </span>
               <span>님과의 채팅</span>
             </div>
