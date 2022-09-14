@@ -16,7 +16,7 @@ const SellerWindow = ({ messages}) => {
   const fetchBuyerInfo = () => {
     const currentUrl = window.location.href
 
-    setBuyer_id(currentUrl.match(/_[A-Z0-9.]+/gi).toString().slice(1))
+    setBuyer_id(currentUrl.match(/_[A-Z0-9.]+/gi)?.toString().slice(1))
 
     const query = userInfoQuery(buyer_id)
 

@@ -13,37 +13,17 @@ import SellerWindow from './SellerWindow'
 //query를 이용해서 Pindetail.jsx에 dmParam을 가져오고, 
 // dmParam을 이용해서 하드코딩 되어있는 부분 고쳐주기
 
-const MessageWindow = () => {
+const MessageWindow = ({user_id}) => {
   const [messages, setMessages] = useState()
   const [newMessage, setNewMessage] = useState("")
   const [loading, setLoading] = useState(false)
   const [dmAddress, setDmAddress] = useState()
   const [pinDetail, setPinDetail] = useState()
-  const [user_id, setUser_id] = useState()
   const scrollRef = useRef()
   const [pageAddress, setPageAddress] = useState()
   const [buyer_id, setBuyer_id] = useState()
 
   let presentTime = new Date();
-
-  const fetchUser_id = () => {
-    const localData = localStorage.getItem('user')
-    let idData = JSON.parse(localData)
-    // 현재 브라우저 사용자가 accountInfo일때
-    if (idData.userName?.length) {
-      const query = userQueryForMyAccount(idData._id)
-      if (query) {
-        client.fetch(query)
-          .then((data) => {
-            setUser_id(data[0]._id)
-          })
-      }
-    // 현재 브라우저 사용자가 googleId일때
-    } else {
-      setUser_id(idData.googleId)
-    }
-  }
-
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -165,10 +145,6 @@ const MessageWindow = () => {
     console.log('messages info', messages);
   }, [messages])
 
-  useEffect( () => {
-    fetchUser_id()
-  }, [])
-
   useEffect(() => {
     fetchPinDetails() 
     fetchBuyer(pageAddress)
@@ -177,7 +153,6 @@ const MessageWindow = () => {
 
   return (
     <div className="flex-1 min-w-0 bg-white xl:flex relative ">
-      <DmSidebar user_id={user_id} pinDetail={pinDetail} />
       <div className="flex-1 p:2 sm:pb-6 justify-between flex flex-col h-screen xl:flex bg-white overflow-y-scroll"> 
         <div className="h-full"> 
           {user_id === buyer_id ?

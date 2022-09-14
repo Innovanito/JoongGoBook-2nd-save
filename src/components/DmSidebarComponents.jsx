@@ -4,6 +4,8 @@ import { client, urlFor } from '../client'
 
 const DmSidebarComponents = ({pinDetails}) => {
 
+  console.log('pinDetails in Dmsidebarcomponent', pinDetails);
+
   return (
     <>
       {pinDetails?.map((pinDetail) => (
@@ -18,7 +20,7 @@ const DmSidebarComponents = ({pinDetails}) => {
                     alt="book-img"
                   />
                 </div>
-                <div className="flex-1 min-w-0">
+                <div className="flex-1">
                   <a href="#" className="focus:outline-none">
                     <p className=' pl-3 font-bold text-gray-900 text-lg text-center py-3'> {pinDetail?.title}</p>
                     <p className="text-sm font-bold text-red-400 text-center pb-2">
@@ -28,6 +30,7 @@ const DmSidebarComponents = ({pinDetails}) => {
                     <p className="text-sm text-gray-500 truncate text-center">
                       <span>{pinDetail?.price}</span>(원)
                     </p>
+                    <h1>test</h1>
                   </a>
                 </div>
               </div>
