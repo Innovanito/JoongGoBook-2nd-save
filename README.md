@@ -57,6 +57,6 @@
 
 
 
-## UI 컴포넌트 관계도(프론트 앤드 파트)
+## UI 컴포넌트 관계도(프론트앤드 파트)
+![중고북 컴포넌트 관계도_dm추가](https://user-images.githubusercontent.com/72393144/192227514-fdfcf529-7096-4cce-8f70-b7253666637e.png)
 
-<img width="1328" alt="중고북 컴포넌트 관계도" src="https://user-images.githubusercontent.com/72393144/192121947-46c618ff-e19b-4a26-ba5a-4a48d2078ac0.png">
