@@ -78,5 +78,13 @@
 
 
 # 스키마 관계도(백앤드 파트)
+![Joonggobook backend Data map](https://user-images.githubusercontent.com/72393144/192292164-2ae95dac-37a5-44d0-9f1e-63980b8214b2.jpg)
+
+### 스키마 요소들
+* UserInfo: 유저의 로그인 정보가 있는 스카마 모음 - 구글로 로그인해서 얻는 GoogleAccount와 중고북 로그인해서 얻는 MyAccount가 있다.
+* Pin: 재품 상세 정보를 저장하는 스카미 -> 요소:제품 이름, 가격, 판매자 이름 등등...
+* DM: 개인 메시지를 통해 판매자와 구매자가 소통할 수 있게 관련 정보를 가진 스키마 -> 요소: 구매자 Id, 판매자 Id, Chat Schema
+* Chat: 구매자와 판매자가 의사소통을 하는 배열 데이터
+
 
 GraphQL의 일종인 GORQ를 이용해서 sanity.io로 backend에 데이터를 넣고 가져왔습니다.
