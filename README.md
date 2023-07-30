@@ -2,9 +2,7 @@
 
 ### 대학생 중고 교제 거래를 위한 플랫폼입니다.
 
-사이트 URL: https://www.joonggobook.com
-
-백업용 사이트 URL: https://64315b485f3163150d5b51f1--effulgent-boba-db1af2.netlify.app/
+사이트 URL: https://64315b485f3163150d5b51f1--effulgent-boba-db1af2.netlify.app/
 
 ## 웹사이트 설명
 
